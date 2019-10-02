@@ -20,29 +20,17 @@ namespace BattleShipsClient
         }
         TcpClient client = new TcpClient();
 
-        private void button28_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button30_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button29_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button33_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
-            Con();
+            //Con();
+            for (int i=0; i<10; i++)
+            {
+                for (int j=0; j<10; j++)
+                {
+                    userShips.Controls.Add(new Button{ Text = "Hit", AutoSize = true }, i, j);
+                }
+            }
         }
         public void Con()
         {
