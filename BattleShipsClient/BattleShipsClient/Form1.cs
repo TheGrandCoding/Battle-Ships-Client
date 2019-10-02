@@ -29,6 +29,7 @@ namespace BattleShipsClient
                 for (int j=0; j<10; j++)
                 {
                     userShips.Controls.Add(new Button{ Text = "Hit", AutoSize = true }, i, j);
+                    oppShips.Controls.Add(new Button { Text = "Hit", AutoSize = true }, i, j);
                 }
             }
         }
