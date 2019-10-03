@@ -50,7 +50,7 @@ namespace BattleShipsClient
                 ChooseShips(btn);
             }
         }
-        int FirstX, SecoundX, FirstY, SecoundY;
+        int FirstX, SecondX, FirstY, SecondY;
         bool FirstClicked = false;
         int lenthShips = 5;
         private void ChooseShips(Button btn)
@@ -65,12 +65,12 @@ namespace BattleShipsClient
             else
             {
                 FirstClicked = false;
-                SecoundX = Convert.ToInt32(Name[0]);
-                SecoundY = Convert.ToInt32(Name[1]);
+                SecondX = Convert.ToInt32(Name[0]);
+                SecondY = Convert.ToInt32(Name[1]);
                 int SL = lenthShips - 1;
-                if (FirstX == SecoundX || FirstY == SecoundY)
+                if (FirstX == SecondX || FirstY == SecondY)
                 {
-                    if (FirstX + SL == SecoundX || FirstX - SL == SecoundX || FirstY + SL == SecoundY || FirstY - SL == SecoundY)
+                    if (FirstX + SL == SecondX || FirstX - SL == SecondX || FirstY + SL == SecondY || FirstY - SL == SecondY)
                     {
                         MessageBox.Show("True");
                     }
