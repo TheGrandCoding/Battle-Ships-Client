@@ -45,6 +45,7 @@ namespace BattleShipsClient
         }
         int FirstX , SecoundX , FirstY , SecoundY;
         bool FirstClicked = false;
+        int lenthShips = 5;
         private void UserBtn_Click(object sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -61,9 +62,10 @@ namespace BattleShipsClient
                     FirstClicked = false;
                     SecoundX = Convert.ToInt32(Name[0]);
                     SecoundY = Convert.ToInt32(Name[1]);
+                    int SL = lenthShips - 1;
                     if(FirstX == SecoundX || FirstY == SecoundY)
                     {
-                        if(FirstX +3 == SecoundX || FirstX - 3 == SecoundX || FirstY + 3 == SecoundY || FirstY - 3 == SecoundY)
+                        if(FirstX +SL == SecoundX || FirstX - SL == SecoundX || FirstY + SL == SecoundY || FirstY - SL == SecoundY)
                         {
                             MessageBox.Show("True");
                         }
