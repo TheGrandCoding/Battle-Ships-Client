@@ -58,6 +58,7 @@ namespace BattleShipsClient
                 }
                 else
                 {
+                    FirstClicked = false;
                     SecoundX = Convert.ToInt32(Name[0]);
                     SecoundY = Convert.ToInt32(Name[1]);
                     if(FirstX == SecoundX || FirstY == SecoundY)
@@ -66,8 +67,16 @@ namespace BattleShipsClient
                         {
                             MessageBox.Show("True");
                         }
+                        else
+                        {
+                            UserBtn_Click(btn, EventArgs.Empty);
+                        }
                     }
-                    FirstClicked = false;
+                    else
+                    {
+                        UserBtn_Click(btn, EventArgs.Empty);
+                    }
+                    
                 }
             }
         }
