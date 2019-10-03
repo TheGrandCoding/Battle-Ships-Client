@@ -43,43 +43,47 @@ namespace BattleShipsClient
         {
             MessageBox.Show("opp");
         }
-        int FirstX , SecoundX , FirstY , SecoundY;
-        bool FirstClicked = false;
-        int lenthShips = 5;
         private void UserBtn_Click(object sender, EventArgs e)
         {
             if (sender is Button btn)
             {
-                var Name = btn.Name.Split(',');
-                if(FirstClicked == false)
+                ChooseShips(btn);
+            }
+        }
+        int FirstX, SecoundX, FirstY, SecoundY;
+        bool FirstClicked = false;
+        int lenthShips = 5;
+        private void ChooseShips(Button btn)
+        {
+            var Name = btn.Name.Split(',');
+            if (FirstClicked == false)
+            {
+                FirstX = Convert.ToInt32(Name[0]);
+                FirstY = Convert.ToInt32(Name[1]);
+                FirstClicked = true;
+            }
+            else
+            {
+                FirstClicked = false;
+                SecoundX = Convert.ToInt32(Name[0]);
+                SecoundY = Convert.ToInt32(Name[1]);
+                int SL = lenthShips - 1;
+                if (FirstX == SecoundX || FirstY == SecoundY)
                 {
-                    FirstX = Convert.ToInt32(Name[0]);
-                    FirstY =Convert.ToInt32(Name[1]);
-                    FirstClicked = true;
-                }
-                else
-                {
-                    FirstClicked = false;
-                    SecoundX = Convert.ToInt32(Name[0]);
-                    SecoundY = Convert.ToInt32(Name[1]);
-                    int SL = lenthShips - 1;
-                    if(FirstX == SecoundX || FirstY == SecoundY)
+                    if (FirstX + SL == SecoundX || FirstX - SL == SecoundX || FirstY + SL == SecoundY || FirstY - SL == SecoundY)
                     {
-                        if(FirstX +SL == SecoundX || FirstX - SL == SecoundX || FirstY + SL == SecoundY || FirstY - SL == SecoundY)
-                        {
-                            MessageBox.Show("True");
-                        }
-                        else
-                        {
-                            UserBtn_Click(btn, EventArgs.Empty);
-                        }
+                        MessageBox.Show("True");
                     }
                     else
                     {
                         UserBtn_Click(btn, EventArgs.Empty);
                     }
-                    
                 }
+                else
+                {
+                    UserBtn_Click(btn, EventArgs.Empty);
+                }
+
             }
         }
         public void Con()
