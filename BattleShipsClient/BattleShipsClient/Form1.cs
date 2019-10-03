@@ -53,7 +53,7 @@ namespace BattleShipsClient
                 ChooseShips(btn);
             }
         }
-        int FirstX, SecoundX, FirstY, SecoundY;
+        int FirstX, SecondX, FirstY, SecondY;
         bool FirstClicked = false;
         int lenthShips = 4;
         private void ChooseShips(Button btn)
@@ -69,35 +69,35 @@ namespace BattleShipsClient
             else
             {
                 FirstClicked = false;
-                SecoundX = Convert.ToInt32(Name[0]);
-                SecoundY = Convert.ToInt32(Name[1]);
+                SecondX = Convert.ToInt32(Name[0]);
+                SecondY = Convert.ToInt32(Name[1]);
                 int SL = lenthShips - 1;
-                if (FirstX == SecoundX || FirstY == SecoundY)
+                if (FirstX == SecondX || FirstY == SecondY)
                 {
-                    if (FirstX + SL == SecoundX)
+                    if (FirstX + SL == SecondX)
                     {
                         for (int i = FirstX; i <= SL + FirstX; i++)
                         {
                             UButtons[i, FirstY].BackColor = Color.Black;
                         }
                     }
-                    else if (FirstX - SL == SecoundX)
+                    else if (FirstX - SL == SecondX)
                     {
-                        for (int i = SecoundX; i <= SL + SecoundX; i++)
+                        for (int i =SecondX; i <= SL +SecondX; i++)
                         {
                             UButtons[i, FirstY].BackColor = Color.Black;
                         }
                     }
-                    else if (FirstY + SL == SecoundY)
+                    else if (FirstY + SL == SecondY)
                     {
                         for (int i = FirstY; i <= SL + FirstY; i++)
                         {
                             UButtons[FirstX, i].BackColor = Color.Black;
                         }
                     }
-                    else if (FirstY - SL == SecoundY)
+                    else if (FirstY - SL == SecondY)
                     {
-                        for (int i = SecoundY; i <= SL + SecoundY; i++)
+                        for (int i = SecondY; i <= SL + SecondY; i++)
                         {
                             UButtons[FirstX, i].BackColor = Color.Black;
                         }
