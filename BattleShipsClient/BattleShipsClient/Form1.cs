@@ -19,7 +19,8 @@ namespace BattleShipsClient
             InitializeComponent();
         }
         TcpClient client = new TcpClient();
-
+        Button[,] UButtons = new Button[10, 10];
+        Button[,] OButtons = new Button[10, 10];
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -34,6 +35,8 @@ namespace BattleShipsClient
                     OppBtn.Click += OppBtn_Click;
                     userBtn.Name =i.ToString() +","+ j.ToString();
                     OppBtn.Name = i.ToString() + "," + j.ToString();
+                    UButtons[i,j] = userBtn;
+                    OButtons[i, j] = OppBtn;
                     userShips.Controls.Add(userBtn, i, j);
                     oppShips.Controls.Add(OppBtn, i, j);
                 }
@@ -52,7 +55,7 @@ namespace BattleShipsClient
         }
         int FirstX, SecoundX, FirstY, SecoundY;
         bool FirstClicked = false;
-        int lenthShips = 5;
+        int lenthShips = 4;
         private void ChooseShips(Button btn)
         {
             var Name = btn.Name.Split(',');
@@ -61,6 +64,7 @@ namespace BattleShipsClient
                 FirstX = Convert.ToInt32(Name[0]);
                 FirstY = Convert.ToInt32(Name[1]);
                 FirstClicked = true;
+                btn.BackColor = Color.Black;
             }
             else
             {
@@ -70,18 +74,34 @@ namespace BattleShipsClient
                 int SL = lenthShips - 1;
                 if (FirstX == SecoundX || FirstY == SecoundY)
                 {
-                    if (FirstX + SL == SecoundX || FirstX - SL == SecoundX || FirstY + SL == SecoundY || FirstY - SL == SecoundY)
+                    if (FirstX + SL == SecoundX)
                     {
-                        MessageBox.Show("True");
+                        for (int i = FirstX; i <= SL + FirstX; i++)
+                        {
+                            UButtons[i, FirstY].BackColor = Color.Black;
+                        }
                     }
-                    else
+                    else if (FirstX - SL == SecoundX)
                     {
-                        UserBtn_Click(btn, EventArgs.Empty);
+                        for (int i = SecoundX; i <= SL + SecoundX; i++)
+                        {
+                            UButtons[i, FirstY].BackColor = Color.Black;
+                        }
                     }
-                }
-                else
-                {
-                    UserBtn_Click(btn, EventArgs.Empty);
+                    else if (FirstY + SL == SecoundY)
+                    {
+                        for (int i = FirstY; i <= SL + FirstY; i++)
+                        {
+                            UButtons[FirstX, i].BackColor = Color.Black;
+                        }
+                    }
+                    else if (FirstY - SL == SecoundY)
+                    {
+                        for (int i = SecoundY; i <= SL + SecoundY; i++)
+                        {
+                            UButtons[FirstX, i].BackColor = Color.Black;
+                        }
+                    }
                 }
 
             }
