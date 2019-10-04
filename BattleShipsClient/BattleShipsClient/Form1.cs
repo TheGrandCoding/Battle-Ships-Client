@@ -55,6 +55,32 @@ namespace BattleShipsClient
         }
         int FirstX, SecondX, FirstY, SecondY;
         bool FirstClicked = false;
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblA_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblUser10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblUser5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblUser1_Click(object sender, EventArgs e)
+        {
+
+        }
+
         int lenthShips = 4;
         private void ChooseShips(Button btn)
         {
