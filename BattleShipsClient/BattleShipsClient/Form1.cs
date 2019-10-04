@@ -42,7 +42,6 @@ namespace BattleShipsClient
                     oppShips.Controls.Add(OppBtn, i, j);
                 }
             }
-            Send("hi");
         }
         private void OppBtn_Click(object sender, EventArgs e)
         {
@@ -90,7 +89,6 @@ namespace BattleShipsClient
                 NetworkStream stream = client.GetStream();
                 Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
                 stream.Write(data, 0, data.Length);
-                // AddMessage($"sent {message} to {opponentusername}");
                 Program.Log("[Sent]: " + message);
             }
             catch (Exception ex)
@@ -100,6 +98,7 @@ namespace BattleShipsClient
             }
         }
         int lenthShips = 5;
+        List<int> UserList
         private void ChooseShips(Button btn)
         {
             var Name = btn.Name.Split(',');
@@ -108,7 +107,7 @@ namespace BattleShipsClient
                 FirstX = Convert.ToInt32(Name[0]);
                 FirstY = Convert.ToInt32(Name[1]);
                 FirstClicked = true;
-                btn.BackColor = Color.Black;
+                btn.BackColor = Color.Red;
             }
             else
             {
@@ -122,28 +121,28 @@ namespace BattleShipsClient
                     {
                         for (int i = FirstX; i <= SL + FirstX; i++)
                         {
-                            UButtons[i, FirstY].BackColor = Color.Black;
+                            UButtons[i, FirstY].BackColor = Color.Red;
                         }
                     }
                     else if (FirstX - SL == SecondX)
                     {
                         for (int i =SecondX; i <= SL +SecondX; i++)
                         {
-                            UButtons[i, FirstY].BackColor = Color.Black;
+                            UButtons[i, FirstY].BackColor = Color.Red;
                         }
                     }
                     else if (FirstY + SL == SecondY)
                     {
                         for (int i = FirstY; i <= SL + FirstY; i++)
                         {
-                            UButtons[FirstX, i].BackColor = Color.Black;
+                            UButtons[FirstX, i].BackColor = Color.Red;
                         }
                     }
                     else if (FirstY - SL == SecondY)
                     {
                         for (int i = SecondY; i <= SL + SecondY; i++)
                         {
-                            UButtons[FirstX, i].BackColor = Color.Black;
+                            UButtons[FirstX, i].BackColor = Color.Red;
                         }
                     }
                 }
@@ -153,8 +152,9 @@ namespace BattleShipsClient
         public void Con()
         {
             bool valid = IPAddress.TryParse(Properties.Resources.IPAdress, out IPAddress ipaddress);
-            client.Connect(ipaddress, 777);
+            client.Connect(ipaddress, 666);
             MessageBox.Show("connected to" + Properties.Resources.IPAdress);
+            Send("UN:"+Environment.UserName);
         }
     }
 }
