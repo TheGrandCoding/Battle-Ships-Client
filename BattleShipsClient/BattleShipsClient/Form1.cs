@@ -24,7 +24,8 @@ namespace BattleShipsClient
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Con();
+            Program.MakeLog();
+            Con();
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
@@ -41,6 +42,7 @@ namespace BattleShipsClient
                     oppShips.Controls.Add(OppBtn, i, j);
                 }
             }
+            Send("hi");
         }
         private void OppBtn_Click(object sender, EventArgs e)
         {
@@ -55,7 +57,25 @@ namespace BattleShipsClient
         }
         int FirstX, SecondX, FirstY, SecondY;
         bool FirstClicked = false;
-        int lenthShips = 4;
+
+
+        public void Send(string message)
+        {
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+                stream.Write(data, 0, data.Length);
+                // AddMessage($"sent {message} to {opponentusername}");
+                Program.Log("[Sent]: " + message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Server has been closed" + ex.ToString());
+                Environment.Exit(0);
+            }
+        }
+        int lenthShips = 5;
         private void ChooseShips(Button btn)
         {
             var Name = btn.Name.Split(',');
