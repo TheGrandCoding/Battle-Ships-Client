@@ -19,7 +19,7 @@ namespace BattleShipsClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Menu());
         }
          static string LogName;
         public static void Log(string message)
