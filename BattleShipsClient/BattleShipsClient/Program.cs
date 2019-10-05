@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using System.IO;
 
 namespace BattleShipsClient
@@ -21,12 +20,17 @@ namespace BattleShipsClient
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Menu());
         }
-         static string LogName;
+        static string LogName;
+        static object LogLock = new object();
         public static void Log(string message)
         {
-            StreamWriter swAppend = File.AppendText(LogName);
-            swAppend.WriteLine("["+DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString()+":"+ DateTime.Now.Second.ToString()+"]"+" - " +message);
-            swAppend.Close();
+            lock (LogLock)
+            {
+                using (StreamWriter swAppend = File.AppendText(LogName))
+                {
+                    swAppend.WriteLine("[" + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString() + "]" + " - " + message);
+                }
+            }
         }
         public static void MakeLog()
         {

@@ -82,6 +82,13 @@ namespace BattleShipsClient
                                     menu.CurrentGames.Items.Add(splitlist[1]);
                                 }
                             });
+                        }else if (data == "StartGame")
+                        {
+                            menu.Invoke((MethodInvoker)delegate
+                            {
+                                menu.Hide();
+                                menu.f1.Show();
+                            });
                         }
                     }
                 }

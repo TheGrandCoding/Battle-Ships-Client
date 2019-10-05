@@ -14,7 +14,7 @@ namespace BattleShipsClient
 {
     public partial class Menu : Form
     {
-        Form1 f1 = new Form1();
+        public Form1 f1 = new Form1();
         TcpClient client = new TcpClient();
 
         public Menu()
@@ -25,6 +25,7 @@ namespace BattleShipsClient
         {
             Program.MakeLog();
             Con();
+            Refresh_Click(null, EventArgs.Empty);
         }
         public void Con()
         {
@@ -39,9 +40,9 @@ namespace BattleShipsClient
         }
         private void StartNewGame_Click(object sender, EventArgs e)
         {
-            if (NewGameName.Text == "")
+            if (NewGameName.Text == "" || NewGameName.Text.Contains("%") || NewGameName.Text.Contains("'"))
             {
-                MessageBox.Show("Please Enter A Game Name");
+                MessageBox.Show("Invalid Game Name");
                 return;
             }
             f1.Send("NewGame:" + NewGameName.Text);
@@ -56,7 +57,7 @@ namespace BattleShipsClient
         {
             if (CurrentGames.SelectedIndex > -1)
             {
-                MessageBox.Show(CurrentGames.SelectedItem.ToString());
+                //MessageBox.Show(CurrentGames.SelectedItem.ToString());
                 f1.Send("JoinGame:" + CurrentGames.SelectedItem.ToString());
             }
         }
@@ -64,6 +65,11 @@ namespace BattleShipsClient
         private void Button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Menu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            
         }
     }
 }
