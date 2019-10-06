@@ -23,6 +23,7 @@ namespace BattleShipsClient
         Button[,] UButtons = new Button[10, 10];
         Button[,] OButtons = new Button[10, 10];
         Size PlayingSize = new Size(1158, 796);
+        string OppName;
         private void Form1_Load(object sender, EventArgs e)
         {
             for (int i = 0; i < 10; i++)
@@ -74,7 +75,7 @@ namespace BattleShipsClient
                         }
                         else if (data.StartsWith("Game:"))
                         {
-                            var splitlist = data.Split(':');//game name is message[1]
+                            var splitlist = data.Split(':');
                             menu.Invoke((MethodInvoker)delegate
                             {
                                 if (!menu.CurrentGames.Items.Contains(splitlist[1]))
@@ -82,12 +83,15 @@ namespace BattleShipsClient
                                     menu.CurrentGames.Items.Add(splitlist[1]);
                                 }
                             });
-                        }else if (data == "StartGame")
+                        }else if (data.StartsWith("Opp:"))
                         {
+                            var splitlist = data.Split(':');
+                            OppName = splitlist[1];
                             menu.Invoke((MethodInvoker)delegate
                             {
                                 menu.Hide();
-                                menu.f1.Show();
+                                this.Text = "vs " + OppName;
+                                this.Show();
                             });
                         }
                     }
@@ -108,14 +112,14 @@ namespace BattleShipsClient
         int FirstX, SecondX, FirstY, SecondY;
         bool FirstClicked = false;
 
-
+        string messagesent;
         public void Send(string message)
         {
             try
             {
                 NetworkStream stream = client.GetStream();
-                message = $"%{message}`";
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+                messagesent = $"%{message}`";
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(messagesent);
                 stream.Write(data, 0, data.Length);
                 Program.Log("[Sent]: " + message);
             }
@@ -126,7 +130,6 @@ namespace BattleShipsClient
             }
         }
         int lenthShips = 5;
-        List<int> UserList;
         private void ChooseShips(Button btn)
         {
             var Name = btn.Name.Split(',');

@@ -50,6 +50,7 @@ namespace BattleShipsClient
 
         private void Refresh_Click(object sender, EventArgs e)
         {
+            CurrentGames.Items.Clear();
             f1.Send("CurrentGames");
         }
 
