@@ -90,7 +90,7 @@
             this.userShips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.userShips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.userShips.Location = new System.Drawing.Point(81, 118);
-            this.userShips.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.userShips.Margin = new System.Windows.Forms.Padding(4);
             this.userShips.Name = "userShips";
             this.userShips.RowCount = 10;
             this.userShips.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -131,7 +131,7 @@
             this.oppShips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.oppShips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.oppShips.Location = new System.Drawing.Point(661, 118);
-            this.oppShips.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.oppShips.Margin = new System.Windows.Forms.Padding(4);
             this.oppShips.Name = "oppShips";
             this.oppShips.RowCount = 10;
             this.oppShips.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -163,7 +163,7 @@
             this.splitter.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.splitter.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.splitter.Location = new System.Drawing.Point(569, 21);
-            this.splitter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitter.Margin = new System.Windows.Forms.Padding(4);
             this.splitter.Name = "splitter";
             this.splitter.Size = new System.Drawing.Size(25, 549);
             this.splitter.TabIndex = 5;
@@ -614,7 +614,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 16;
             this.listBox1.Location = new System.Drawing.Point(81, 587);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(1045, 148);
             this.listBox1.TabIndex = 46;
@@ -670,7 +670,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.oppShips);
             this.Controls.Add(this.userShips);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

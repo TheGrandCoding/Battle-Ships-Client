@@ -34,9 +34,11 @@ namespace BattleShipsClient
                     Button OppBtn = new Button();
                     userBtn.Click += UserBtn_Click;
                     OppBtn.Click += OppBtn_Click;
-                    userBtn.Name =i.ToString() +","+ j.ToString();
+                    userBtn.BackColor = SystemColors.Control;
+                    OppBtn.BackColor = SystemColors.Control;
+                    userBtn.Name = i.ToString() + "," + j.ToString();
                     OppBtn.Name = i.ToString() + "," + j.ToString();
-                    UButtons[i,j] = userBtn;
+                    UButtons[i, j] = userBtn;
                     OButtons[i, j] = OppBtn;
                     userShips.Controls.Add(userBtn, i, j);
                     oppShips.Controls.Add(OppBtn, i, j);
@@ -56,7 +58,7 @@ namespace BattleShipsClient
                     String responseData = String.Empty;
                     string DataBunched = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                     string[] messages = DataBunched.Split('%').Where(x => string.IsNullOrWhiteSpace(x) == false && x != "%").ToArray();
-                    foreach(var msg in messages)
+                    foreach (var msg in messages)
                     {
                         data = msg.Substring(0, msg.IndexOf("`"));
                         Program.Log("[Rec] " + data);
@@ -83,7 +85,7 @@ namespace BattleShipsClient
                                     menu.CurrentGames.Items.Add(splitlist[1]);
                                 }
                             });
-                        }else if (data.StartsWith("Opp:"))
+                        } else if (data.StartsWith("Opp:"))
                         {
                             var splitlist = data.Split(':');
                             OppName = splitlist[1];
@@ -106,11 +108,17 @@ namespace BattleShipsClient
         {
             if (sender is Button btn)
             {
-                ChooseShips(btn);
+                if (btn.BackColor == Color.Red)
+                {
+                    RemoveShips(btn);
+                }
+                else if(!(lenShips.Count == 0))
+                {
+                    ChooseShips(btn);
+                }
             }
         }
-        int FirstX, SecondX, FirstY, SecondY;
-        bool FirstClicked = false;
+
 
         string messagesent;
         public void Send(string message)
@@ -129,23 +137,47 @@ namespace BattleShipsClient
                 Environment.Exit(0);
             }
         }
-        int lenthShips = 5;
+        int FirstX, SecondX, FirstY, SecondY , lengthShip , SL;
+        Button FirstClicked = null;
+        List<int> lenShips = new List<int>(){2,3,3,4,5};
         private void ChooseShips(Button btn)
         {
             var Name = btn.Name.Split(',');
-            if (FirstClicked == false)
+            if (FirstClicked == null)
             {
                 FirstX = Convert.ToInt32(Name[0]);
                 FirstY = Convert.ToInt32(Name[1]);
-                FirstClicked = true;
+                FirstClicked = btn;
                 btn.BackColor = Color.Red;
             }
             else
             {
-                FirstClicked = false;
                 SecondX = Convert.ToInt32(Name[0]);
                 SecondY = Convert.ToInt32(Name[1]);
-                int SL = lenthShips - 1;
+                if(FirstX == SecondX)
+                {
+                    lengthShip = Math.Abs(FirstY - SecondY) +1;
+                }else if(FirstY == SecondY)
+                {
+                    lengthShip = Math.Abs(FirstX - SecondX)+1;
+                }
+                else
+                {
+                    FirstClicked.BackColor = SystemColors.Control;
+                    MessageBox.Show("Invalid Ship");
+                    FirstClicked = null;
+                    return;
+                }
+                if (!lenShips.Contains(lengthShip))
+                {
+                    FirstClicked.BackColor = SystemColors.Control;
+                    MessageBox.Show("Invalid Ship");
+                    FirstClicked = null;
+                    return;
+                }
+                SL = lengthShip -1;
+                lenShips.Remove(lengthShip);
+                FirstClicked = null;
                 if (FirstX == SecondX || FirstY == SecondY)
                 {
                     if (FirstX + SL == SecondX)
@@ -180,6 +212,9 @@ namespace BattleShipsClient
 
             }
         }
+        private void RemoveShips(Button btn)
+        {
 
+        }
     }
 }
