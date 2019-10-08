@@ -24,8 +24,11 @@ namespace BattleShipsClient
         Button[,] OButtons = new Button[10, 10];
         Size PlayingSize = new Size(1158, 796);
         string OppName;
+        bool ConfirmedShips = false;
+        Button[,] ChosenShips = new Button[5,5];
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.Location = new Point(0, 0);
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
@@ -108,13 +111,16 @@ namespace BattleShipsClient
         {
             if (sender is Button btn)
             {
-                if (btn.BackColor == Color.Red)
+                if(ConfirmedShips == false)
                 {
-                    RemoveShips(btn);
-                }
-                else if(!(lenShips.Count == 0))
-                {
-                    ChooseShips(btn);
+                    if (btn.BackColor == Color.Red)
+                    {
+                        RemoveShips(btn);
+                    }
+                    else if (!(lenShips.Count == 0))
+                    {
+                        ChooseShips(btn);
+                    }
                 }
             }
         }
@@ -137,9 +143,13 @@ namespace BattleShipsClient
                 Environment.Exit(0);
             }
         }
-        int FirstX, SecondX, FirstY, SecondY , lengthShip , SL;
-        Button FirstClicked = null;
-        List<int> lenShips = new List<int>(){2,3,3,4,5};
+
+        private void ConfirmBTN_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
         private void ChooseShips(Button btn)
         {
             var Name = btn.Name.Split(',');
@@ -208,6 +218,48 @@ namespace BattleShipsClient
                             UButtons[FirstX, i].BackColor = Color.Red;
                         }
                     }
+                }
+
+            }
+        }
+        int FirstX, SecondX, FirstY, SecondY, lengthShip, SL;
+        List<int> lenShips = new List<int>() { 2, 3, 3, 4, 5 };
+        Button FirstClicked = null;
+        private void ChoseShips(Button btn)
+        {
+            var Name = btn.Name.Split(',');
+            if (FirstClicked == null)
+            {
+                FirstX = Convert.ToInt32(Name[0]);
+                FirstY = Convert.ToInt32(Name[1]);
+                FirstClicked = btn;
+                btn.BackColor = Color.Yellow;
+            }
+            else
+            {
+                SecondY = Convert.ToInt32(Name[0]);
+                SecondX = Convert.ToInt32(Name[1]);
+                if (FirstX == SecondX)
+                {
+                    lengthShip = Math.Abs(FirstY - SecondY) + 1;
+                }
+                else if (FirstY == SecondY)
+                {
+                    lengthShip = Math.Abs(FirstX - SecondX) + 1;
+                }
+                else
+                {
+                    FirstClicked.BackColor = SystemColors.Control;
+                    MessageBox.Show("Invalid Ship");
+                    FirstClicked = null;
+                    return;
+                }
+                if (!lenShips.Contains(lengthShip))
+                {
+                    FirstClicked.BackColor = SystemColors.Control;
+                    MessageBox.Show("Invalid Ship");
+                    FirstClicked = null;
+                    return;
                 }
 
             }
