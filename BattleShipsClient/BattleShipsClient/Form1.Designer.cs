@@ -158,6 +158,7 @@
             // splitter
             // 
             this.splitter.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.splitter.Enabled = false;
             this.splitter.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.splitter.Location = new System.Drawing.Point(427, 17);
             this.splitter.Name = "splitter";
