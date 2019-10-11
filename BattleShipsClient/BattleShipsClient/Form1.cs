@@ -150,6 +150,7 @@ namespace BattleShipsClient
             {
                 ConfirmedShips = true;
                 ConfirmBTN.Visible = false;
+                //send Ships to server
             }
             else
             {
@@ -260,6 +261,8 @@ namespace BattleShipsClient
             }
             Ships.RemoveAt(lnumber);
             ConfirmBTN.Visible = false;
+            FirstClicked.BackColor = SystemColors.Control;
+            FirstClicked = null;
         }
     }
 }
