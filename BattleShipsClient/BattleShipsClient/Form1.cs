@@ -48,6 +48,23 @@ namespace BattleShipsClient
                 }
             }
         }
+        string messagesent;
+        public void Send(string message)
+        {
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                messagesent = $"%{message}`";
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(messagesent);
+                stream.Write(data, 0, data.Length);
+                Program.Log("[Sent]: " + message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Server has been closed" + ex.ToString());
+                Environment.Exit(0);
+            }
+        }
         public void recievedata()
         {
             string data;
@@ -113,40 +130,30 @@ namespace BattleShipsClient
             {
                 if(ConfirmedShips == false)
                 {
-                    if (btn.BackColor == Color.Black)
+                    if (!(btn.BackColor == SystemColors.Control))
                     {
-                        RemoveShips(btn);
+                        if(FirstClicked == null)
+                        {
+                            RemoveShips(btn);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid Ship");
+                            FirstClicked.BackColor = SystemColors.Control;
+                            FirstClicked = null;
+                            return;
+                        }
                     }
-                    else if (!(lenShips.Count == 0))
+                    else
                     {
                         ChoseShips(btn);
                     }
                 }
             }
         }
-
-
-        string messagesent;
-        public void Send(string message)
-        {
-            try
-            {
-                NetworkStream stream = client.GetStream();
-                messagesent = $"%{message}`";
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes(messagesent);
-                stream.Write(data, 0, data.Length);
-                Program.Log("[Sent]: " + message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Server has been closed" + ex.ToString());
-                Environment.Exit(0);
-            }
-        }
-
         private void ConfirmBTN_Click(object sender, EventArgs e)
         {
-            if(lenShips.Count == 0)
+            if (AllowedShipLengths.Count ==0)
             {
                 ConfirmedShips = true;
                 ConfirmBTN.Visible = false;
@@ -159,20 +166,20 @@ namespace BattleShipsClient
         }
 
        
-        int FirstX, SecondX, FirstY, SecondY, lengthShip, SL;
-        List<int> lenShips = new List<int>() { 2, 3, 3, 4, 5 };
+        int FirstX, SecondX, FirstY, SecondY, lengthShip;
+        List<int> AllowedShipLengths = new List<int>() { 2,3,3,4,5};
         Button FirstClicked = null;
-        List<Button> ThisShip = new List<Button>();
         int temp;
         private void ChoseShips(Button btn)
         {
+            List<Button> ThisShip = new List<Button>();
             var Name = btn.Name.Split(',');
             if (FirstClicked == null)
             {
                 FirstX = Convert.ToInt32(Name[0]);
                 FirstY = Convert.ToInt32(Name[1]);
                 FirstClicked = btn;
-                btn.BackColor = Color.Black;
+                btn.BackColor = Color.Yellow;
             }
             else
             {
@@ -193,13 +200,12 @@ namespace BattleShipsClient
                     FirstClicked = null;
                     return;
                 }
-                if (!lenShips.Contains(lengthShip))
+                if (!(AllowedShipLengths.Contains(lengthShip)))
                 {
                     MessageBox.Show("Invalid Ship");
                     FirstClicked = null;
                     return;
                 }
-                ThisShip.Clear();
                 if (SecondX < FirstX)
                 {
                     temp = FirstX;
@@ -217,7 +223,7 @@ namespace BattleShipsClient
                     for(int n = FirstY; n < SecondY+1; n++)
                     {
                         Button b = UButtons[i,n];
-                        if(b.BackColor == Color.Black)
+                        if(!(b.BackColor == SystemColors.Control))
                         {
                             foreach(Button butt in ThisShip)
                             {
@@ -228,16 +234,27 @@ namespace BattleShipsClient
                             MessageBox.Show("Invalid Ship");
                             return;
                         }
-                        b.BackColor = Color.Black;
+                        b.BackColor = ShipColour(lengthShip);
                         ThisShip.Add(b);
                     }
                 }
-                lenShips.Remove(lengthShip);
+                AllowedShipLengths.Remove(lengthShip);
                 Ships.Add(ThisShip);
                 FirstClicked = null;
-                if (lenShips.Count == 0)
+                if (AllowedShipLengths.Count == 0)
                 {
                     ConfirmBTN.Visible = true;
+                }
+                PrintShips();
+            }
+        }
+        private void PrintShips()
+        {
+            foreach(List<Button>  l in Ships)
+            {
+                foreach(Button b in l)
+                {
+                    MessageBox.Show(b.Name);
                 }
             }
         }
@@ -251,18 +268,53 @@ namespace BattleShipsClient
                     if(bt == btn)
                     {
                         lnumber = i;
+                        break;
                     }
                 }
             }
-            lenShips.Add(Ships[lnumber].Count);
+            AllowedShipLengths.Add(Ships[lnumber].Count);
             foreach (Button b in Ships[lnumber])
             {
                 b.BackColor = SystemColors.Control;
             }
             Ships.RemoveAt(lnumber);
             ConfirmBTN.Visible = false;
-            FirstClicked.BackColor = SystemColors.Control;
-            FirstClicked = null;
+            try
+            {
+                FirstClicked.BackColor = SystemColors.Control;
+                FirstClicked = null;
+            }catch (Exception) { }
+        }
+
+        private Color ShipColour(int SL)
+        {
+            if(SL == 2)
+            {
+                return Color.Purple;
+            }else if(SL == 4)
+            {
+                return Color.Green;
+            }else if(SL == 5)
+            {
+                return Color.Orange;
+            }else if(SL == 3)
+            {
+                AllowedShipLengths.Remove(3);
+                if (AllowedShipLengths.Contains(3))
+                {
+                    AllowedShipLengths.Add(3);
+                    return Color.LightBlue;
+                }
+                else
+                {
+                    AllowedShipLengths.Add(3);
+                    return Color.DarkBlue;
+                }
+            }
+            else
+            {
+                return SystemColors.Control;
+            }
         }
     }
 }
