@@ -39,8 +39,8 @@ namespace BattleShipsClient
                     OppBtn.Click += OppBtn_Click;
                     userBtn.BackColor = SystemColors.Control;
                     OppBtn.BackColor = SystemColors.Control;
-                    userBtn.Name = i.ToString() + "," + j.ToString();
-                    OppBtn.Name = i.ToString() + "," + j.ToString();
+                    userBtn.Name = i.ToString() + j.ToString();
+                    OppBtn.Name = i.ToString() + j.ToString();
                     UButtons[i, j] = userBtn;
                     OButtons[i, j] = OppBtn;
                     userShips.Controls.Add(userBtn, i, j);
@@ -151,13 +151,23 @@ namespace BattleShipsClient
                 }
             }
         }
+        string ShipString = "";
         private void ConfirmBTN_Click(object sender, EventArgs e)
         {
             if (AllowedShipLengths.Count ==0)
             {
                 ConfirmedShips = true;
                 ConfirmBTN.Visible = false;
-                //send Ships to server
+                ShipString = "";
+                foreach (List<Button> LB in Ships)
+                {
+                    ShipString = "Ships:"+ LB[0].Name;
+                    for (int i = 1;i<LB.Count;i++)
+                    {
+                        ShipString += ","+LB[i].Name;
+                    }
+                    Send(ShipString);
+                }
             }
             else
             {
@@ -169,11 +179,18 @@ namespace BattleShipsClient
         int FirstX, SecondX, FirstY, SecondY, lengthShip;
         List<int> AllowedShipLengths = new List<int>() { 2,3,3,4,5};
         Button FirstClicked = null;
-        int temp;
+        int Swap;
         private void ChoseShips(Button btn)
         {
+            //MessageBox.Show(btn.Name);
             List<Button> ThisShip = new List<Button>();
-            var Name = btn.Name.Split(',');
+            List<string> Name = new List<string>();
+            foreach(char c in btn.Name)
+            {
+                Name.Add(c.ToString());
+            }
+            //MessageBox.Show(Name[0]);
+            //MessageBox.Show(Name[1]);
             if (FirstClicked == null)
             {
                 FirstX = Convert.ToInt32(Name[0]);
@@ -208,15 +225,15 @@ namespace BattleShipsClient
                 }
                 if (SecondX < FirstX)
                 {
-                    temp = FirstX;
+                    Swap = FirstX;
                     FirstX = SecondX;
-                    SecondX = temp;
+                    SecondX = Swap;
                 }
                 if (SecondY < FirstY)
                 {
-                    temp = FirstY;
+                    Swap = FirstY;
                     FirstY = SecondY;
-                    SecondY = temp;
+                    SecondY = Swap;
                 }
                 for(int i = FirstX; i <SecondX+1;i++)
                 {
@@ -245,7 +262,7 @@ namespace BattleShipsClient
                 {
                     ConfirmBTN.Visible = true;
                 }
-                PrintShips();
+                //PrintShips();
             }
         }
         private void PrintShips()
