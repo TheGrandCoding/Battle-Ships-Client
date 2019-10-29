@@ -106,7 +106,8 @@ namespace BattleShipsClient
                                     menu.CurrentGames.Items.Add(splitlist[1]);
                                 }
                             });
-                        } else if (data.StartsWith("Opp:"))
+                        }
+                        else if (data.StartsWith("Opp:"))
                         {
                             var splitlist = data.Split(':');
                             OppName = splitlist[1];
@@ -116,9 +117,29 @@ namespace BattleShipsClient
                                 this.Text = "vs " + OppName;
                                 this.Show();
                             });
-                        } else if (data == "Turn")
+                        }
+                        else if (data == "Turn")
                         {
                             EnableOppShips(1);
+                        }
+                        else if (data.StartsWith("Hit:"))
+                        {
+
+                        }
+                        else if (data.StartsWith("OHit:"))
+                        {
+
+                        }
+                        else if (data.StartsWith("Miss:"))
+                        {
+
+                        }
+                        else if (data.StartsWith("OMiss:"))
+                        {
+
+                        }else if(data  == "Invalid")
+                        {
+
                         }
                     }
                 }
