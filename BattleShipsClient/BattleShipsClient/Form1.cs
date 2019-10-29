@@ -128,7 +128,7 @@ namespace BattleShipsClient
         {
             if (sender is Button btn)
             {
-                Send(btn.Name);
+                Send("OShip:"+btn.Name);
             }
         }
         private void UserBtn_Click(object sender, EventArgs e)
