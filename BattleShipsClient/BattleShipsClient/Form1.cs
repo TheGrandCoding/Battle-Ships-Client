@@ -125,30 +125,55 @@ namespace BattleShipsClient
                         else if (data.StartsWith("Hit:"))
                         {
                             var splitlist = data.Split(':');
-                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
-                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
-                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
+                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
+                            });
                         }
                         else if (data.StartsWith("OHit:"))
                         {
                             var splitlist = data.Split(':');
-                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
-                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
-                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
+                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
+                            });
                         }
                         else if (data.StartsWith("Miss:"))
                         {
                             var splitlist = data.Split(':');
-                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Red;
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
+                            });
                         }
                         else if (data.StartsWith("OMiss:"))
                         {
                             var splitlist = data.Split(':');
-                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Red;
+                            this.Invoke((MethodInvoker)delegate 
+                            {
+                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
+                            });
                         }
                         else if(data  == "Invalid")
                         {
-
+                            MessageBox.Show("Invalid Posistion Chosen \n Please choose again");
+                            EnableOppShips(1);
+                        }else if (data.StartsWith("OSunk:"))
+                        {
+                            //opp ship sunk
+                            var SL = data.Split(':');
+                            var splitlist = SL[1].Split(',');
+                            this.Invoke((MethodInvoker)delegate 
+                            {
+                                foreach (var p in splitlist)
+                                {
+                                    OButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
+                                }
+                            });
                         }
                     }
                 }
@@ -159,6 +184,7 @@ namespace BattleShipsClient
             if (sender is Button btn)
             {
                 Send("OShip:"+btn.Name);
+                EnableOppShips(0);
             }
         }
         private void UserBtn_Click(object sender, EventArgs e)
@@ -375,14 +401,17 @@ namespace BattleShipsClient
         {
             foreach(Button b in OButtons)
             {
-                if(Option == 0)
+                this.Invoke((MethodInvoker)delegate
                 {
-                    b.Enabled = false;
-                }
-                else
-                {
-                    b.Enabled = true;
-                }
+                    if (Option == 0)
+                    {
+                        b.Enabled = false;
+                    }
+                    else
+                    {
+                        b.Enabled = true;
+                    }
+                });
             }
         }
     }
