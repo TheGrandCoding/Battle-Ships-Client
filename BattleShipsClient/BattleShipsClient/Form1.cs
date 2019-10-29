@@ -124,20 +124,29 @@ namespace BattleShipsClient
                         }
                         else if (data.StartsWith("Hit:"))
                         {
-
+                            var splitlist = data.Split(':');
+                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
+                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
                         }
                         else if (data.StartsWith("OHit:"))
                         {
-
+                            var splitlist = data.Split(':');
+                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
+                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
                         }
                         else if (data.StartsWith("Miss:"))
                         {
-
+                            var splitlist = data.Split(':');
+                            OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Red;
                         }
                         else if (data.StartsWith("OMiss:"))
                         {
-
-                        }else if(data  == "Invalid")
+                            var splitlist = data.Split(':');
+                            UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Red;
+                        }
+                        else if(data  == "Invalid")
                         {
 
                         }
