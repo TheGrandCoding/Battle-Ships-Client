@@ -41,6 +41,7 @@ namespace BattleShipsClient
                     OppBtn.BackColor = SystemColors.Control;
                     userBtn.Name = i.ToString() + j.ToString();
                     OppBtn.Name = i.ToString() + j.ToString();
+                    OppBtn.Enabled = false;
                     UButtons[i, j] = userBtn;
                     OButtons[i, j] = OppBtn;
                     userShips.Controls.Add(userBtn, i, j);
@@ -115,6 +116,9 @@ namespace BattleShipsClient
                                 this.Text = "vs " + OppName;
                                 this.Show();
                             });
+                        } else if (data == "Turn")
+                        {
+                            EnableOppShips(1);
                         }
                     }
                 }
@@ -122,7 +126,10 @@ namespace BattleShipsClient
         }
         private void OppBtn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("opp");
+            if (sender is Button btn)
+            {
+                Send(btn.Name);
+            }
         }
         private void UserBtn_Click(object sender, EventArgs e)
         {
@@ -168,6 +175,7 @@ namespace BattleShipsClient
                     }
                     Send(ShipString);
                 }
+                Send("ShipsConfirmed");
             }
             else
             {
@@ -331,6 +339,20 @@ namespace BattleShipsClient
             else
             {
                 return SystemColors.Control;
+            }
+        }
+        private void EnableOppShips(int Option)
+        {
+            foreach(Button b in OButtons)
+            {
+                if(Option == 0)
+                {
+                    b.Enabled = false;
+                }
+                else
+                {
+                    b.Enabled = true;
+                }
             }
         }
     }
