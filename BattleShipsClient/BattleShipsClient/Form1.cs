@@ -484,5 +484,18 @@ namespace BattleShipsClient
                 });
             }
         }
+
+        private string ConvertStringToInt(string rawText) 
+        {
+            List<string> listLetters = new List<string>() {"A","B","C","D","E","F","G","H","I","J"};
+
+            var yValue = rawText[0];
+            var xValue = rawText[1];
+
+            var xCoordinate = listLetters[xValue];
+            var yCoordinate = (yValue+1).ToString();            
+
+            return(xCoordinate+yCoordinate);
+        }
     }
 }
