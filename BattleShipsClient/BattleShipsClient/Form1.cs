@@ -29,11 +29,15 @@ namespace BattleShipsClient
 
         private void AddMessage(string message)
         {
-            this.Invoke((MethodInvoker)delegate
+            if (this.InvokeRequired)
             {
-                AddMessage(message);
+                this.Invoke((MethodInvoker)(() => AddMessage(message)));
+            }
+            else
+            {
+                LBMessages.Items.Add(message);
                 LBMessages.TopIndex = LBMessages.Items.Count - 1;
-            });
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -135,7 +139,8 @@ namespace BattleShipsClient
                             {
                                 AddMessage("Your Turn");
                             });
-                        }else if(data == "OTurn")
+                        }
+                        else if (data == "OTurn")
                         {
                             this.Invoke((MethodInvoker)delegate
                             {
@@ -150,7 +155,7 @@ namespace BattleShipsClient
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"Your Ship  was hit");
+                                AddMessage($"You Hit Your Opponents Ship");
                             });
                         }
                         else if (data.StartsWith("OHit:"))
@@ -161,7 +166,7 @@ namespace BattleShipsClient
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"You Hit Your Opponents Ship");
+                                AddMessage($"Your Ship  was hit");
                             });
                         }
                         else if (data.StartsWith("Miss:"))
@@ -170,7 +175,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                AddMessage($"Your Opponents Missed");
+                                AddMessage($"You missed");
                             });
                         }
                         else if (data.StartsWith("OMiss:"))
@@ -179,7 +184,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                AddMessage($"You missed");
+                                AddMessage($"Your Opponents Missed");
                             });
                         }
                         else if (data == "Invalid")
@@ -210,8 +215,25 @@ namespace BattleShipsClient
                                 foreach (var p in splitlist)
                                 {
                                     UButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
-                                    AddMessage($"Your Ship Was Sunk");
                                 }
+                                AddMessage($"Your Ship Was Sunk");
+                            });
+                        }
+                        else if (data == "Win")
+                        {
+                            MessageBox.Show("You win");
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                this.Close();
+                                menu.ShowDialog();
+                            });
+                        }else if(data == "Lose")
+                        {
+                            MessageBox.Show("You Lose");
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                this.Close();
+                                menu.ShowDialog();
                             });
                         }
                     }
