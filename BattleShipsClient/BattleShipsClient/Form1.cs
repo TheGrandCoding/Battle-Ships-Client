@@ -26,6 +26,15 @@ namespace BattleShipsClient
         string OppName;
         bool ConfirmedShips = false;
         List<List<Button>> Ships = new List<List<Button>>();
+
+        private void AddMessage(string message)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                AddMessage(message);
+                LBMessages.TopIndex = LBMessages.Items.Count - 1;
+            });
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Location = new Point(0, 0);
@@ -116,7 +125,7 @@ namespace BattleShipsClient
                                 menu.Hide();
                                 this.Text = "vs " + OppName;
                                 this.Show();
-                                LBMessages.Items.Add($"{OppName} joined the game");
+                                AddMessage($"{OppName} joined the game");
                             });
                         }
                         else if (data == "Turn")
@@ -124,13 +133,13 @@ namespace BattleShipsClient
                             EnableOppShips(1);
                             this.Invoke((MethodInvoker)delegate
                             {
-                                LBMessages.Items.Add("Your Turn");
+                                AddMessage("Your Turn");
                             });
                         }else if(data == "OTurn")
                         {
                             this.Invoke((MethodInvoker)delegate
                             {
-                                LBMessages.Items.Add("Opponents Turn");
+                                AddMessage("Opponents Turn");
                             });
                         }
                         else if (data.StartsWith("Hit:"))
@@ -141,7 +150,7 @@ namespace BattleShipsClient
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                LBMessages.Items.Add($"Your Ship  was hit");
+                                AddMessage($"Your Ship  was hit");
                             });
                         }
                         else if (data.StartsWith("OHit:"))
@@ -152,7 +161,7 @@ namespace BattleShipsClient
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                LBMessages.Items.Add($"You Hit Your Opponents Ship");
+                                AddMessage($"You Hit Your Opponents Ship");
                             });
                         }
                         else if (data.StartsWith("Miss:"))
@@ -161,7 +170,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                LBMessages.Items.Add($"Your Opponents Missed");
+                                AddMessage($"Your Opponents Missed");
                             });
                         }
                         else if (data.StartsWith("OMiss:"))
@@ -170,7 +179,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                LBMessages.Items.Add($"You missed");
+                                AddMessage($"You missed");
                             });
                         }
                         else if (data == "Invalid")
@@ -189,7 +198,7 @@ namespace BattleShipsClient
                                 {
                                     OButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
                                 }
-                                LBMessages.Items.Add($"You Sunk Your Opponents Ship");
+                                AddMessage($"You Sunk Your Opponents Ship");
                             });
                         }
                         else if (data.StartsWith("Sunk:"))
@@ -201,7 +210,7 @@ namespace BattleShipsClient
                                 foreach (var p in splitlist)
                                 {
                                     UButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
-                                    LBMessages.Items.Add($"Your Ship Was Sunk");
+                                    AddMessage($"Your Ship Was Sunk");
                                 }
                             });
                         }
@@ -264,8 +273,8 @@ namespace BattleShipsClient
                 Send("ShipsConfirmed");
                 this.Invoke((MethodInvoker)delegate
                 {
-                    LBMessages.Items.Add("Ships Confirmed");
-                    LBMessages.Items.Add("Waiting for Opponent");
+                    AddMessage("Ships Confirmed");
+                    AddMessage("Waiting for Opponent");
                 });
                 foreach (Button b in UButtons)
                 {
