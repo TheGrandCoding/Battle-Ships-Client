@@ -130,6 +130,8 @@ namespace BattleShipsClient
                                 this.Text = "vs " + OppName;
                                 this.Show();
                                 AddMessage($"{OppName} joined the game");
+                                AddMessage("Please Choose Your Ships");
+                                HideShips.Visible = false;
                             });
                         }
                         else if (data == "Turn")
@@ -230,6 +232,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 this.Close();
+                                menu.first = false;
                                 menu.ShowDialog();
                             });
                         }else if(data == "Lose")
@@ -238,7 +241,8 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 this.Close();
-                                menu.ShowDialog();
+                                menu.first = false;
+                                menu.Show();
                             });
                         }
                     }

@@ -16,6 +16,7 @@ namespace BattleShipsClient
     {
         public Form1 f1 = new Form1();
         TcpClient client = new TcpClient();
+        public bool first = true;
 
         public Menu()
         {
@@ -23,14 +24,28 @@ namespace BattleShipsClient
         }
         private void Menu_Load(object sender, EventArgs e)
         {
-            Program.MakeLog();
-            Con();
+            if (first == true)
+            {
+                Program.MakeLog();
+                Con();
+            }
+            else
+            {
+                Thread rd = new Thread(f1.recievedata);
+                rd.Start();
+                f1 = new Form1();
+                f1.client = client;
+                f1.menu = this;
+                f1.Send("UN:" + Environment.UserName);
+                this.Text = "Menu";
+                JoinPNL.Show();
+            }
             Refresh_Click(null, EventArgs.Empty);
         }
         public void Con()
         {
             bool valid = IPAddress.TryParse(Properties.Resources.IPAdress, out IPAddress ipaddress);
-            client.Connect(ipaddress, 1234);
+            client.Connect(ipaddress, 666);
             f1.client = client;
             f1.menu = this;
             f1.Send("UN:" + Environment.UserName);
