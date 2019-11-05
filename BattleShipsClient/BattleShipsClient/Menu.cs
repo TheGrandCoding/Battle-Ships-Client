@@ -30,7 +30,7 @@ namespace BattleShipsClient
         public void Con()
         {
             bool valid = IPAddress.TryParse(Properties.Resources.IPAdress, out IPAddress ipaddress);
-            client.Connect(ipaddress, 666);
+            client.Connect(ipaddress, 1234);
             f1.client = client;
             f1.menu = this;
             f1.Send("UN:" + Environment.UserName);

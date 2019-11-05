@@ -75,6 +75,10 @@
             this.label21 = new System.Windows.Forms.Label();
             this.LBMessages = new System.Windows.Forms.ListBox();
             this.ConfirmBTN = new System.Windows.Forms.Button();
+            this.HideShips = new System.Windows.Forms.Panel();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.HideShips.SuspendLayout();
             this.SuspendLayout();
             // 
             // userShips
@@ -569,14 +573,14 @@
             // LBMessages
             // 
             this.LBMessages.FormattingEnabled = true;
-            this.LBMessages.Location = new System.Drawing.Point(105, 447);
+            this.LBMessages.Location = new System.Drawing.Point(105, 467);
             this.LBMessages.Name = "LBMessages";
             this.LBMessages.Size = new System.Drawing.Size(753, 147);
             this.LBMessages.TabIndex = 46;
             // 
             // ConfirmBTN
             // 
-            this.ConfirmBTN.Location = new System.Drawing.Point(29, 464);
+            this.ConfirmBTN.Location = new System.Drawing.Point(29, 467);
             this.ConfirmBTN.Name = "ConfirmBTN";
             this.ConfirmBTN.Size = new System.Drawing.Size(70, 23);
             this.ConfirmBTN.TabIndex = 0;
@@ -585,11 +589,41 @@
             this.ConfirmBTN.Visible = false;
             this.ConfirmBTN.Click += new System.EventHandler(this.ConfirmBTN_Click);
             // 
+            // HideShips
+            // 
+            this.HideShips.BackColor = System.Drawing.Color.Black;
+            this.HideShips.Controls.Add(this.label22);
+            this.HideShips.Location = new System.Drawing.Point(4, 42);
+            this.HideShips.Name = "HideShips";
+            this.HideShips.Size = new System.Drawing.Size(375, 419);
+            this.HideShips.TabIndex = 47;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.Color.White;
+            this.label22.Location = new System.Drawing.Point(121, 170);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(117, 13);
+            this.label22.TabIndex = 0;
+            this.label22.Text = "H To Show/Hide Ships\r\n";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(144, 428);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(84, 13);
+            this.label23.TabIndex = 1;
+            this.label23.Text = "H to Show/Hide";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(870, 609);
+            this.ClientSize = new System.Drawing.Size(870, 626);
+            this.Controls.Add(this.HideShips);
+            this.Controls.Add(this.label23);
             this.Controls.Add(this.ConfirmBTN);
             this.Controls.Add(this.LBMessages);
             this.Controls.Add(this.label12);
@@ -637,10 +671,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.oppShips);
             this.Controls.Add(this.userShips);
+            this.KeyPreview = true;
             this.Location = new System.Drawing.Point(50, 50);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
+            this.HideShips.ResumeLayout(false);
+            this.HideShips.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -695,6 +733,9 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ListBox LBMessages;
         private System.Windows.Forms.Button ConfirmBTN;
+        private System.Windows.Forms.Panel HideShips;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
     }
 }
 

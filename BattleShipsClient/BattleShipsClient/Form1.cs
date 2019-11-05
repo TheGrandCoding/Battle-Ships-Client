@@ -155,7 +155,7 @@ namespace BattleShipsClient
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"You Hit Your Opponents Ship");
+                                AddMessage($"You Hit Your Opponents Ship({ShipNameConvert(splitlist[1])})");
                             });
                         }
                         else if (data.StartsWith("OHit:"))
@@ -166,7 +166,7 @@ namespace BattleShipsClient
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"Your Ship  was hit");
+                                AddMessage($"Your Ship  was hit({ShipNameConvert(splitlist[1])})");
                             });
                         }
                         else if (data.StartsWith("Miss:"))
@@ -175,7 +175,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                AddMessage($"You missed");
+                                AddMessage($"You missed({ShipNameConvert(splitlist[1])})");
                             });
                         }
                         else if (data.StartsWith("OMiss:"))
@@ -184,7 +184,7 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                AddMessage($"Your Opponents Missed");
+                                AddMessage($"Your Opponents Missed({ShipNameConvert(splitlist[1])})");
                             });
                         }
                         else if (data == "Invalid")
@@ -194,7 +194,7 @@ namespace BattleShipsClient
                         }
                         else if (data.StartsWith("OSunk:"))
                         {
-                            //opp ship sunk
+                            string ShipNames = "";
                             var SL = data.Split(':');
                             var splitlist = SL[1].Split(',');
                             this.Invoke((MethodInvoker)delegate
@@ -202,12 +202,15 @@ namespace BattleShipsClient
                                 foreach (var p in splitlist)
                                 {
                                     OButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
+                                    ShipNames += ","+ShipNameConvert(p);
                                 }
-                                AddMessage($"You Sunk Your Opponents Ship");
+                                ShipNames = ShipNames.Remove(0, 1);
+                                AddMessage($"You Sunk Your Opponents Ship({ShipNames})");
                             });
                         }
                         else if (data.StartsWith("Sunk:"))
                         {
+                            string ShipNames = "";
                             var SL = data.Split(':');
                             var splitlist = SL[1].Split(',');
                             this.Invoke((MethodInvoker)delegate
@@ -215,8 +218,10 @@ namespace BattleShipsClient
                                 foreach (var p in splitlist)
                                 {
                                     UButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
+                                    ShipNames += "," + ShipNameConvert(p);
                                 }
-                                AddMessage($"Your Ship Was Sunk");
+                                ShipNames = ShipNames.Remove(0, 1);
+                                AddMessage($"Your Ship Was Sunk({ShipNames})");
                             });
                         }
                         else if (data == "Win")
@@ -409,6 +414,26 @@ namespace BattleShipsClient
                 }
             }
         }
+
+
+
+
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar == 'h' || e.KeyChar == 'H')
+            {
+                if (HideShips.Visible == true)
+                {
+                    HideShips.Visible = false;
+                }
+                else
+                {
+                    HideShips.Visible = true;
+                }
+            }
+        }
+
         private void RemoveShips(Button btn)
         {
             int lnumber = 0;
@@ -485,16 +510,13 @@ namespace BattleShipsClient
             }
         }
 
-        private string ConvertStringToInt(string rawText) 
+        public static string ShipNameConvert(string rawText) 
         {
             List<string> listLetters = new List<string>() {"A","B","C","D","E","F","G","H","I","J"};
-
-            var yValue = rawText[0];
-            var xValue = rawText[1];
-
+            var yValue = int.Parse(rawText[1].ToString());
+            var xValue = int.Parse(rawText[0].ToString());
             var xCoordinate = listLetters[xValue];
             var yCoordinate = (yValue+1).ToString();            
-
             return(xCoordinate+yCoordinate);
         }
     }
