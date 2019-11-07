@@ -14,6 +14,7 @@ namespace BattleShipsClient
 {
     public partial class Menu : Form
     {
+        public System.Windows.Forms.Timer RefreshTimer;
         public Form1 f1 = new Form1();
         TcpClient client = new TcpClient();
         public bool first = true;
@@ -40,7 +41,10 @@ namespace BattleShipsClient
                 this.Text = "Menu";
                 JoinPNL.Show();
             }
-            Refresh_Click(null, EventArgs.Empty);
+            RefreshTimer = new System.Windows.Forms.Timer();
+            RefreshTimer.Tick += new EventHandler(Refresh_Click);
+            RefreshTimer.Interval = 5000;
+            RefreshTimer.Start();
         }
         public void Con()
         {

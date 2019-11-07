@@ -126,6 +126,7 @@ namespace BattleShipsClient
                             OppName = splitlist[1];
                             menu.Invoke((MethodInvoker)delegate
                             {
+                                menu.RefreshTimer.Stop();
                                 menu.Hide();
                                 this.Text = "You vs " + OppName;
                                 this.Show();
@@ -204,7 +205,7 @@ namespace BattleShipsClient
                                 foreach (var p in splitlist)
                                 {
                                     OButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
-                                    ShipNames += ","+ShipNameConvert(p);
+                                    ShipNames += "," + ShipNameConvert(p);
                                 }
                                 ShipNames = ShipNames.Remove(0, 1);
                                 AddMessage($"You Sunk Your Opponents Ship({ShipNames})");
@@ -228,6 +229,11 @@ namespace BattleShipsClient
                         }
                         else if (data == "Win")
                         {
+                            AddMessage("You Win");
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                HideShips.Visible = false;
+                            });
                             MessageBox.Show("You win");
                             this.Invoke((MethodInvoker)delegate
                             {
@@ -237,6 +243,11 @@ namespace BattleShipsClient
                             });
                         }else if(data == "Lose")
                         {
+                            AddMessage("You Lose");
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                HideShips.Visible = false;
+                            });
                             MessageBox.Show("You Lose");
                             this.Invoke((MethodInvoker)delegate
                             {
