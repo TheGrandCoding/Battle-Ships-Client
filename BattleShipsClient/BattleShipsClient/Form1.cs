@@ -127,7 +127,7 @@ namespace BattleShipsClient
                             menu.Invoke((MethodInvoker)delegate
                             {
                                 menu.Hide();
-                                this.Text = "vs " + OppName;
+                                this.Text = "You vs " + OppName;
                                 this.Show();
                                 AddMessage($"{OppName} joined the game");
                                 AddMessage("Please Choose Your Ships");
