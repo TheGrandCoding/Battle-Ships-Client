@@ -138,7 +138,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(240, 86);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(406, 39);
+            this.label2.Size = new System.Drawing.Size(390, 38);
             this.label2.TabIndex = 16;
             this.label2.Text = "Waiting For Player to Join";
             // 
@@ -150,7 +150,6 @@
             this.button1.TabIndex = 17;
             this.button1.Text = "Leave Game";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // Menu
             // 
@@ -162,7 +161,6 @@
             this.Controls.Add(this.button1);
             this.Name = "Menu";
             this.Text = "Menu";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Menu_FormClosed);
             this.Load += new System.EventHandler(this.Menu_Load);
             this.JoinPNL.ResumeLayout(false);
             this.JoinPNL.PerformLayout();

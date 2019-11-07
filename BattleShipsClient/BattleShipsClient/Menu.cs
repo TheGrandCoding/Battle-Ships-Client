@@ -44,18 +44,20 @@ namespace BattleShipsClient
         }
         public void Con()
         {
-            bool valid = IPAddress.TryParse(Properties.Resources.IPAdress, out IPAddress ipaddress);
-            client.Connect(ipaddress, 666);
-            f1.client = client;
-            f1.menu = this;
-            f1.Send("UN:" + Environment.UserName);
-            Program.Log("Connected to " + Properties.Resources.IPAdress);
-            Thread rd = new Thread(f1.recievedata);
-            rd.Start();
+            if(IPAddress.TryParse(Properties.Resources.IPAdress, out IPAddress ipaddress))
+            {
+                client.Connect(ipaddress, 9876);
+                f1.client = client;
+                f1.menu = this;
+                f1.Send("UN:" + Environment.UserName);
+                Program.Log("Connected to " + Properties.Resources.IPAdress);
+                Thread rd = new Thread(f1.recievedata);
+                rd.Start();
+            }
         }
         private void StartNewGame_Click(object sender, EventArgs e)
         {
-            if (NewGameName.Text == "" || NewGameName.Text.Contains("%") || NewGameName.Text.Contains("'"))
+            if (string.IsNullOrWhiteSpace(NewGameName.Text) || NewGameName.Text.Contains("%") || NewGameName.Text.Contains("'"))
             {
                 MessageBox.Show("Invalid Game Name");
                 return;
@@ -78,14 +80,5 @@ namespace BattleShipsClient
             }
         }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Menu_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            
-        }
     }
 }

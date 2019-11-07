@@ -69,7 +69,7 @@ namespace BattleShipsClient
             {
                 NetworkStream stream = client.GetStream();
                 messagesent = $"%{message}`";
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes(messagesent);
+                Byte[] data = System.Text.Encoding.Unicode.GetBytes(messagesent);
                 stream.Write(data, 0, data.Length);
                 Program.Log("[Sent]: " + message);
             }
@@ -90,7 +90,7 @@ namespace BattleShipsClient
                 if ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                 {
                     String responseData = String.Empty;
-                    string DataBunched = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                    string DataBunched = System.Text.Encoding.Unicode.GetString(bytes, 0, i);
                     string[] messages = DataBunched.Split('%').Where(x => string.IsNullOrWhiteSpace(x) == false && x != "%").ToArray();
                     foreach (var msg in messages)
                     {
