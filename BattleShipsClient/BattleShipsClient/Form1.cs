@@ -68,7 +68,7 @@ namespace BattleShipsClient
             try
             {
                 NetworkStream stream = client.GetStream();
-                messagesent = $"%{message}`";
+                messagesent = $"¬{message}`";
                 Byte[] data = System.Text.Encoding.Unicode.GetBytes(messagesent);
                 stream.Write(data, 0, data.Length);
                 Program.Log("[Sent]: " + message);
@@ -91,7 +91,7 @@ namespace BattleShipsClient
                 {
                     String responseData = String.Empty;
                     string DataBunched = System.Text.Encoding.Unicode.GetString(bytes, 0, i);
-                    string[] messages = DataBunched.Split('%').Where(x => string.IsNullOrWhiteSpace(x) == false && x != "%").ToArray();
+                    string[] messages = DataBunched.Split('¬').Where(x => string.IsNullOrWhiteSpace(x) == false && x != "¬").ToArray();
                     foreach (var msg in messages)
                     {
                         data = msg.Substring(0, msg.IndexOf("`"));
@@ -109,16 +109,20 @@ namespace BattleShipsClient
                                 menu.Text = "Game = " + splitlist[1];
                             });
                         }
-                        else if (data.StartsWith("Game:"))
+                        else if (data.StartsWith("Games:"))
                         {
                             var splitlist = data.Split(':');
-                            menu.Invoke((MethodInvoker)delegate
+                            var Games = splitlist[1].Split(',');
+                            foreach(var G in Games)
                             {
-                                if (!menu.CurrentGames.Items.Contains(splitlist[1]))
+                                menu.Invoke((MethodInvoker)delegate
                                 {
-                                    menu.CurrentGames.Items.Add(splitlist[1]);
-                                }
-                            });
+                                    if (!menu.CurrentGames.Items.Contains(G))
+                                    {
+                                        menu.CurrentGames.Items.Add(G);
+                                    }
+                                });
+                            }
                         }
                         else if (data.StartsWith("Opp:"))
                         {
@@ -131,7 +135,7 @@ namespace BattleShipsClient
                                 this.Text = "You vs " + OppName;
                                 this.Show();
                                 AddMessage($"{OppName} joined the game");
-                                AddMessage("Please Choose Your Ships");
+                                AddMessage("Please Choose Your Ships(Destroyer[2],Subramine[3],Cruiser[3],Battleship[4],Carrier[5])");
                                 HideShips.Visible = false;
                             });
                         }
@@ -141,6 +145,8 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 AddMessage("Your Turn");
+                                LBLOShips.Visible = true;
+                                LBOShips.Visible = true;
                             });
                         }
                         else if (data == "OTurn")
@@ -148,6 +154,8 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 AddMessage("Opponents Turn");
+                                LBLOShips.Visible = true;
+                                LBOShips.Visible = true;
                             });
                         }
                         else if (data.StartsWith("Hit:"))
@@ -255,6 +263,10 @@ namespace BattleShipsClient
                                 menu.first = false;
                                 menu.Show();
                             });
+                        }else if (data.StartsWith("Message:"))
+                        {
+                            var SL = data.Split(':');
+                            AddMessage(SL[1]);
                         }
                     }
                 }
@@ -447,6 +459,17 @@ namespace BattleShipsClient
                     HideShips.Visible = true;
                 }
             }
+        }
+
+        private void BTNSend_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TBSend.Text) || TBSend.Text.Contains("`") || TBSend.Text.Contains("¬")|| TBSend.Text.Contains(":")) //change amount of letters
+            {
+                MessageBox.Show("Invalid Message");
+                return;
+            }
+            Send("Message:"+TBSend.Text);
+            TBSend.Text = "";
         }
 
         private void RemoveShips(Button btn)

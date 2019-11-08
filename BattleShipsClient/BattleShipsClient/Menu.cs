@@ -61,9 +61,9 @@ namespace BattleShipsClient
         }
         private void StartNewGame_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(NewGameName.Text) || NewGameName.Text.Contains("%") || NewGameName.Text.Contains("'"))
+            if (string.IsNullOrWhiteSpace(NewGameName.Text) || NewGameName.Text.Contains("`") || NewGameName.Text.Contains("¬")|| NewGameName.Text.Contains(","))
             {
-                MessageBox.Show("Invalid Game Name");
+                MessageBox.Show("Invalid Game Name(No ` ¬ ,)");
                 return;
             }
             f1.Send("NewGame:" + NewGameName.Text);

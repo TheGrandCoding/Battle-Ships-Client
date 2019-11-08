@@ -78,6 +78,14 @@
             this.HideShips = new System.Windows.Forms.Panel();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
+            this.LBUShips = new System.Windows.Forms.ListBox();
+            this.LBOShips = new System.Windows.Forms.ListBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.LBLOShips = new System.Windows.Forms.Label();
+            this.TBSend = new System.Windows.Forms.TextBox();
+            this.BTNSend = new System.Windows.Forms.Button();
+            this.label27 = new System.Windows.Forms.Label();
             this.HideShips.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -573,14 +581,14 @@
             // LBMessages
             // 
             this.LBMessages.FormattingEnabled = true;
-            this.LBMessages.Location = new System.Drawing.Point(105, 467);
+            this.LBMessages.Location = new System.Drawing.Point(200, 467);
             this.LBMessages.Name = "LBMessages";
-            this.LBMessages.Size = new System.Drawing.Size(753, 147);
+            this.LBMessages.Size = new System.Drawing.Size(418, 121);
             this.LBMessages.TabIndex = 46;
             // 
             // ConfirmBTN
             // 
-            this.ConfirmBTN.Location = new System.Drawing.Point(29, 467);
+            this.ConfirmBTN.Location = new System.Drawing.Point(42, 594);
             this.ConfirmBTN.Name = "ConfirmBTN";
             this.ConfirmBTN.Size = new System.Drawing.Size(70, 23);
             this.ConfirmBTN.TabIndex = 0;
@@ -593,10 +601,11 @@
             // 
             this.HideShips.BackColor = System.Drawing.Color.Black;
             this.HideShips.Controls.Add(this.label22);
-            this.HideShips.Location = new System.Drawing.Point(4, 42);
+            this.HideShips.Location = new System.Drawing.Point(4, 38);
             this.HideShips.Name = "HideShips";
-            this.HideShips.Size = new System.Drawing.Size(375, 419);
+            this.HideShips.Size = new System.Drawing.Size(380, 386);
             this.HideShips.TabIndex = 47;
+            this.HideShips.Visible = false;
             // 
             // label22
             // 
@@ -611,17 +620,108 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(144, 428);
+            this.label23.Location = new System.Drawing.Point(39, 39);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(84, 13);
+            this.label23.Size = new System.Drawing.Size(113, 13);
             this.label23.TabIndex = 1;
-            this.label23.Text = "H to Show/Hide";
+            this.label23.Text = "H to Show/Hide Ships";
+            // 
+            // LBUShips
+            // 
+            this.LBUShips.FormattingEnabled = true;
+            this.LBUShips.Items.AddRange(new object[] {
+            "Destroyer(2)",
+            "Submarine(3)",
+            "Cruiser(3)",
+            "Battleship(4)",
+            "Carrier(5)"});
+            this.LBUShips.Location = new System.Drawing.Point(4, 467);
+            this.LBUShips.Name = "LBUShips";
+            this.LBUShips.Size = new System.Drawing.Size(190, 121);
+            this.LBUShips.TabIndex = 1;
+            // 
+            // LBOShips
+            // 
+            this.LBOShips.FormattingEnabled = true;
+            this.LBOShips.Items.AddRange(new object[] {
+            "Destroyer(2)",
+            "Submarine(3)",
+            "Cruiser(3)",
+            "Battleship(4)",
+            "Carrier(5)"});
+            this.LBOShips.Location = new System.Drawing.Point(624, 467);
+            this.LBOShips.Name = "LBOShips";
+            this.LBOShips.Size = new System.Drawing.Size(190, 121);
+            this.LBOShips.TabIndex = 48;
+            this.LBOShips.Visible = false;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(53, 451);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(58, 13);
+            this.label24.TabIndex = 49;
+            this.label24.Text = "Your Ships";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(364, 451);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(55, 13);
+            this.label25.TabIndex = 50;
+            this.label25.Text = "Messages";
+            // 
+            // LBLOShips
+            // 
+            this.LBLOShips.AutoSize = true;
+            this.LBLOShips.Location = new System.Drawing.Point(678, 451);
+            this.LBLOShips.Name = "LBLOShips";
+            this.LBLOShips.Size = new System.Drawing.Size(68, 13);
+            this.LBLOShips.TabIndex = 51;
+            this.LBLOShips.Text = "Enemy Ships";
+            this.LBLOShips.Visible = false;
+            // 
+            // TBSend
+            // 
+            this.TBSend.Location = new System.Drawing.Point(277, 594);
+            this.TBSend.Name = "TBSend";
+            this.TBSend.Size = new System.Drawing.Size(418, 20);
+            this.TBSend.TabIndex = 52;
+            // 
+            // BTNSend
+            // 
+            this.BTNSend.Location = new System.Drawing.Point(722, 591);
+            this.BTNSend.Name = "BTNSend";
+            this.BTNSend.Size = new System.Drawing.Size(75, 23);
+            this.BTNSend.TabIndex = 53;
+            this.BTNSend.Text = "Send";
+            this.BTNSend.UseVisualStyleBackColor = true;
+            this.BTNSend.Click += new System.EventHandler(this.BTNSend_Click);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(190, 597);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(81, 13);
+            this.label27.TabIndex = 54;
+            this.label27.Text = "Send Message:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(870, 626);
+            this.ClientSize = new System.Drawing.Size(820, 619);
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.BTNSend);
+            this.Controls.Add(this.TBSend);
+            this.Controls.Add(this.LBLOShips);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.LBOShips);
+            this.Controls.Add(this.LBUShips);
             this.Controls.Add(this.HideShips);
             this.Controls.Add(this.label23);
             this.Controls.Add(this.ConfirmBTN);
@@ -736,6 +836,14 @@
         private System.Windows.Forms.Panel HideShips;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ListBox LBUShips;
+        private System.Windows.Forms.ListBox LBOShips;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label LBLOShips;
+        private System.Windows.Forms.TextBox TBSend;
+        private System.Windows.Forms.Button BTNSend;
+        private System.Windows.Forms.Label label27;
     }
 }
 
