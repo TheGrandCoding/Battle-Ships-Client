@@ -16,7 +16,7 @@ namespace BattleShipsClient
     {
         public System.Windows.Forms.Timer RefreshTimer;
         public Form1 f1 = new Form1();
-        TcpClient client = new TcpClient();
+        public TcpClient client = new TcpClient();
         public bool first = true;
 
         public Menu()
@@ -41,6 +41,7 @@ namespace BattleShipsClient
                 this.Text = "Menu";
                 JoinPNL.Show();
             }
+            Refresh_Click(null, EventArgs.Empty);
             RefreshTimer = new System.Windows.Forms.Timer();
             RefreshTimer.Tick += new EventHandler(Refresh_Click);
             RefreshTimer.Interval = 5000;
@@ -84,5 +85,15 @@ namespace BattleShipsClient
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            f1.Send("LeftG");
+            JoinPNL.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

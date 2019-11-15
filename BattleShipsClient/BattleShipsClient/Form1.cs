@@ -79,6 +79,7 @@ namespace BattleShipsClient
                 Environment.Exit(0);
             }
         }
+        List<string> NameShip = new List<string>() {"Destroyer","Submarine","Cruiser","BattleShip","Carrier" };
         public void recievedata()
         {
             string data;
@@ -145,8 +146,6 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 AddMessage("Your Turn");
-                                LBLOShips.Visible = true;
-                                LBOShips.Visible = true;
                             });
                         }
                         else if (data == "OTurn")
@@ -154,30 +153,30 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 AddMessage("Opponents Turn");
-                                LBLOShips.Visible = true;
-                                LBOShips.Visible = true;
                             });
                         }
                         else if (data.StartsWith("Hit:"))
                         {
                             var splitlist = data.Split(':');
+                            string ShipName = NameShip[Convert.ToInt32(splitlist[1])];
                             this.Invoke((MethodInvoker)delegate
                             {
-                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
-                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
-                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"You Hit Your Opponents Ship({ShipNameConvert(splitlist[1])})");
+                                OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatStyle = FlatStyle.Flat;
+                                OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                                OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderSize = 1;
+                                AddMessage($"You Hit Your Opponents {ShipName}({ShipNameConvert(splitlist[2])})");
                             });
                         }
                         else if (data.StartsWith("OHit:"))
                         {
                             var splitlist = data.Split(':');
+                            string ShipName = NameShip[Convert.ToInt32(splitlist[1])];
                             this.Invoke((MethodInvoker)delegate
                             {
-                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatStyle = FlatStyle.Flat;
-                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderColor = Color.Red;
-                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"Your Ship  was hit({ShipNameConvert(splitlist[1])})");
+                                UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatStyle = FlatStyle.Flat;
+                                UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                                UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderSize = 1;
+                                AddMessage($"Your {ShipName}  was hit({ShipNameConvert(splitlist[2])})");
                             });
                         }
                         else if (data.StartsWith("Miss:"))
@@ -207,7 +206,8 @@ namespace BattleShipsClient
                         {
                             string ShipNames = "";
                             var SL = data.Split(':');
-                            var splitlist = SL[1].Split(',');
+                            var splitlist = SL[2].Split(',');
+                            string SN = NameShip[Convert.ToInt32(SL[1])];
                             this.Invoke((MethodInvoker)delegate
                             {
                                 foreach (var p in splitlist)
@@ -216,14 +216,15 @@ namespace BattleShipsClient
                                     ShipNames += "," + ShipNameConvert(p);
                                 }
                                 ShipNames = ShipNames.Remove(0, 1);
-                                AddMessage($"You Sunk Your Opponents Ship({ShipNames})");
+                                AddMessage($"You Sunk Your Opponents {SN}({ShipNames})");
                             });
                         }
                         else if (data.StartsWith("Sunk:"))
                         {
                             string ShipNames = "";
                             var SL = data.Split(':');
-                            var splitlist = SL[1].Split(',');
+                            var splitlist = SL[2].Split(',');
+                            string SN = NameShip[Convert.ToInt32(splitlist[1])];
                             this.Invoke((MethodInvoker)delegate
                             {
                                 foreach (var p in splitlist)
@@ -232,7 +233,7 @@ namespace BattleShipsClient
                                     ShipNames += "," + ShipNameConvert(p);
                                 }
                                 ShipNames = ShipNames.Remove(0, 1);
-                                AddMessage($"Your Ship Was Sunk({ShipNames})");
+                                AddMessage($"Your {SN} Was Sunk({ShipNames})");
                             });
                         }
                         else if (data == "Win")
@@ -246,7 +247,10 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 this.Close();
+                                menu = new Menu();
                                 menu.first = false;
+                                menu.client = client;
+                                menu.JoinPNL.Show();
                                 menu.ShowDialog();
                             });
                         }else if(data == "Lose")
@@ -260,13 +264,16 @@ namespace BattleShipsClient
                             this.Invoke((MethodInvoker)delegate
                             {
                                 this.Close();
+                                menu = new Menu();
+                                menu.client = client;
+                                menu.JoinPNL.Show();
                                 menu.first = false;
                                 menu.Show();
                             });
                         }else if (data.StartsWith("Message:"))
                         {
                             var SL = data.Split(':');
-                            AddMessage(SL[1]);
+                            AddMessage($"{OppName}:{SL[1]}");
                         }
                     }
                 }
@@ -463,13 +470,41 @@ namespace BattleShipsClient
 
         private void BTNSend_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TBSend.Text) || TBSend.Text.Contains("`") || TBSend.Text.Contains("¬")|| TBSend.Text.Contains(":")) //change amount of letters
+            if (string.IsNullOrWhiteSpace(CBmsg.SelectedText))
             {
                 MessageBox.Show("Invalid Message");
                 return;
             }
-            Send("Message:"+TBSend.Text);
-            TBSend.Text = "";
+            Send("Message:"+CBmsg.SelectedText);
+            CBmsg.SelectedIndex = -1;
+        }
+
+        private void BTNhelp_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("HelpMessageHere");
+        }
+
+        private void BTNLeave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Send("LeftG");
+                this.Close();
+                menu = new Menu();
+                menu.client = client;
+                menu.JoinPNL.Show();
+                menu.first = false;
+                menu.Show();
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void BTNQuit_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private void RemoveShips(Button btn)

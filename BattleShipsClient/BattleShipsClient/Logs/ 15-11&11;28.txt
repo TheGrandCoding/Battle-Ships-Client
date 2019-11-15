@@ -1,0 +1,13 @@
+[11:28:46] - [Sent]: UN:shaabd14
+[11:28:46] - Connected to 127.0.0.1
+[11:28:46] - [Sent]: CurrentGames
+[11:28:46] - [Rec] Games:Hi
+[11:28:51] - [Sent]: CurrentGames
+[11:28:51] - [Rec] Games:Hi
+[11:28:56] - [Sent]: CurrentGames
+[11:28:56] - [Rec] Games:Hi
+[11:29:1] - [Sent]: CurrentGames
+[11:29:1] - [Sent]: CurrentGames
+[11:29:6] - [Sent]: CurrentGames
+[11:29:11] - [Sent]: CurrentGames
+[11:29:16] - [Sent]: CurrentGames

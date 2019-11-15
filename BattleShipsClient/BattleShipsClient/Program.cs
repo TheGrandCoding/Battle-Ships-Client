@@ -18,8 +18,8 @@ namespace BattleShipsClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Menu());
-            Application.Run(new Form1());
+            Application.Run(new Menu());
+            //Application.Run(new Form1());
         }
         static string LogName;
         static object LogLock = new object();
