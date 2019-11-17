@@ -76,6 +76,7 @@ namespace BattleShipsClient
             catch (Exception ex)
             {
                 MessageBox.Show("Server has been closed" + ex.ToString());
+                Program.Log(ex.ToString());
                 Environment.Exit(0);
             }
         }
@@ -83,200 +84,209 @@ namespace BattleShipsClient
         public void recievedata()
         {
             string data;
-            while (true)
+            try
             {
-                NetworkStream stream = client.GetStream();
-                Byte[] bytes = new byte[256];
-                int i;
-                if ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                while (true)
                 {
-                    String responseData = String.Empty;
-                    string DataBunched = System.Text.Encoding.Unicode.GetString(bytes, 0, i);
-                    string[] messages = DataBunched.Split('¬').Where(x => string.IsNullOrWhiteSpace(x) == false && x != "¬").ToArray();
-                    foreach (var msg in messages)
+                    NetworkStream stream = client.GetStream();
+                    Byte[] bytes = new byte[256];
+                    int i;
+                    if ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
-                        data = msg.Substring(0, msg.IndexOf("`"));
-                        Program.Log("[Rec] " + data);
-                        if (data == "InvalidName")
+                        String responseData = String.Empty;
+                        string DataBunched = System.Text.Encoding.Unicode.GetString(bytes, 0, i);
+                        string[] messages = DataBunched.Split('¬').Where(x => string.IsNullOrWhiteSpace(x) == false && x != "¬").ToArray();
+                        foreach (var msg in messages)
                         {
-                            MessageBox.Show("Name is already in use , please choose another one");
-                        }
-                        else if (data.StartsWith("JoinedGame:"))
-                        {
-                            var splitlist = data.Split(':');
-                            menu.Invoke((MethodInvoker)delegate
+                            data = msg.Substring(0, msg.IndexOf("`"));
+                            Program.Log("[Rec] " + data);
+                            if (data == "InvalidName")
                             {
-                                menu.JoinPNL.Hide();
-                                menu.Text = "Game = " + splitlist[1];
-                            });
-                        }
-                        else if (data.StartsWith("Games:"))
-                        {
-                            var splitlist = data.Split(':');
-                            var Games = splitlist[1].Split(',');
-                            foreach(var G in Games)
+                                MessageBox.Show("Name is already in use , please choose another one");
+                            }
+                            else if (data.StartsWith("JoinedGame:"))
                             {
-                                menu.Invoke((MethodInvoker)delegate
+                                var splitlist = data.Split(':');
+                                this.Invoke((MethodInvoker)delegate
                                 {
-                                    if (!menu.CurrentGames.Items.Contains(G))
-                                    {
-                                        menu.CurrentGames.Items.Add(G);
-                                    }
+                                    menu.JoinPNL.Hide();
+                                    menu.Text = "Game = " + splitlist[1];
                                 });
                             }
-                        }
-                        else if (data.StartsWith("Opp:"))
-                        {
-                            var splitlist = data.Split(':');
-                            OppName = splitlist[1];
-                            menu.Invoke((MethodInvoker)delegate
+                            else if (data.StartsWith("Games:"))
                             {
-                                menu.RefreshTimer.Stop();
-                                menu.Hide();
-                                this.Text = "You vs " + OppName;
-                                this.Show();
-                                AddMessage($"{OppName} joined the game");
-                                AddMessage("Please Choose Your Ships(Destroyer[2],Subramine[3],Cruiser[3],Battleship[4],Carrier[5])");
-                                HideShips.Visible = false;
-                            });
-                        }
-                        else if (data == "Turn")
-                        {
-                            EnableOppShips(1);
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                AddMessage("Your Turn");
-                            });
-                        }
-                        else if (data == "OTurn")
-                        {
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                AddMessage("Opponents Turn");
-                            });
-                        }
-                        else if (data.StartsWith("Hit:"))
-                        {
-                            var splitlist = data.Split(':');
-                            string ShipName = NameShip[Convert.ToInt32(splitlist[1])];
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatStyle = FlatStyle.Flat;
-                                OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderColor = Color.Red;
-                                OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"You Hit Your Opponents {ShipName}({ShipNameConvert(splitlist[2])})");
-                            });
-                        }
-                        else if (data.StartsWith("OHit:"))
-                        {
-                            var splitlist = data.Split(':');
-                            string ShipName = NameShip[Convert.ToInt32(splitlist[1])];
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatStyle = FlatStyle.Flat;
-                                UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderColor = Color.Red;
-                                UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderSize = 1;
-                                AddMessage($"Your {ShipName}  was hit({ShipNameConvert(splitlist[2])})");
-                            });
-                        }
-                        else if (data.StartsWith("Miss:"))
-                        {
-                            var splitlist = data.Split(':');
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                AddMessage($"You missed({ShipNameConvert(splitlist[1])})");
-                            });
-                        }
-                        else if (data.StartsWith("OMiss:"))
-                        {
-                            var splitlist = data.Split(':');
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
-                                AddMessage($"Your Opponents Missed({ShipNameConvert(splitlist[1])})");
-                            });
-                        }
-                        else if (data == "Invalid")
-                        {
-                            MessageBox.Show("Invalid Posistion Chosen \n Please choose again");
-                            EnableOppShips(1);
-                        }
-                        else if (data.StartsWith("OSunk:"))
-                        {
-                            string ShipNames = "";
-                            var SL = data.Split(':');
-                            var splitlist = SL[2].Split(',');
-                            string SN = NameShip[Convert.ToInt32(SL[1])];
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                foreach (var p in splitlist)
+                                var splitlist = data.Split(':');
+                                var Games = splitlist[1].Split(',');
+                                foreach (var G in Games)
                                 {
-                                    OButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
-                                    ShipNames += "," + ShipNameConvert(p);
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        if (!menu.CurrentGames.Items.Contains(G))
+                                        {
+                                            menu.CurrentGames.Items.Add(G);
+                                        }
+                                    });
                                 }
-                                ShipNames = ShipNames.Remove(0, 1);
-                                AddMessage($"You Sunk Your Opponents {SN}({ShipNames})");
-                            });
-                        }
-                        else if (data.StartsWith("Sunk:"))
-                        {
-                            string ShipNames = "";
-                            var SL = data.Split(':');
-                            var splitlist = SL[2].Split(',');
-                            string SN = NameShip[Convert.ToInt32(splitlist[1])];
-                            this.Invoke((MethodInvoker)delegate
+                            }
+                            else if (data.StartsWith("Opp:"))
                             {
-                                foreach (var p in splitlist)
+                                var splitlist = data.Split(':');
+                                OppName = splitlist[1];
+                                this.Invoke((MethodInvoker)delegate
                                 {
-                                    UButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
-                                    ShipNames += "," + ShipNameConvert(p);
-                                }
-                                ShipNames = ShipNames.Remove(0, 1);
-                                AddMessage($"Your {SN} Was Sunk({ShipNames})");
-                            });
-                        }
-                        else if (data == "Win")
-                        {
-                            AddMessage("You Win");
-                            this.Invoke((MethodInvoker)delegate
+                                    menu.RefreshTimer.Stop();
+                                    menu.Hide();
+                                    this.Text = "You vs " + OppName;
+                                    this.Show();
+                                    AddMessage($"{OppName} joined the game");
+                                    AddMessage("Please Choose Your Ships(Destroyer[2],Subramine[3],Cruiser[3],Battleship[4],Carrier[5])");
+                                    HideShips.Visible = false;
+                                });
+                            }
+                            else if (data == "Turn")
                             {
-                                HideShips.Visible = false;
-                            });
-                            MessageBox.Show("You win");
-                            this.Invoke((MethodInvoker)delegate
+                                EnableOppShips(1);
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    AddMessage("Your Turn");
+                                });
+                            }
+                            else if (data == "OTurn")
                             {
-                                this.Close();
-                                menu = new Menu();
-                                menu.first = false;
-                                menu.client = client;
-                                menu.JoinPNL.Show();
-                                menu.ShowDialog();
-                            });
-                        }else if(data == "Lose")
-                        {
-                            AddMessage("You Lose");
-                            this.Invoke((MethodInvoker)delegate
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    AddMessage("Opponents Turn");
+                                });
+                            }
+                            else if (data.StartsWith("Hit:"))
                             {
-                                HideShips.Visible = false;
-                            });
-                            MessageBox.Show("You Lose");
-                            this.Invoke((MethodInvoker)delegate
+                                var splitlist = data.Split(':');
+                                string ShipName = NameShip[Convert.ToInt32(splitlist[1])];
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatStyle = FlatStyle.Flat;
+                                    OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                                    OButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderSize = 1;
+                                    AddMessage($"You Hit Your Opponents {ShipName}({ShipNameConvert(splitlist[2])})");
+                                });
+                            }
+                            else if (data.StartsWith("OHit:"))
                             {
-                                this.Close();
-                                menu = new Menu();
-                                menu.client = client;
-                                menu.JoinPNL.Show();
-                                menu.first = false;
-                                menu.Show();
-                            });
-                        }else if (data.StartsWith("Message:"))
-                        {
-                            var SL = data.Split(':');
-                            AddMessage($"{OppName}:{SL[1]}");
+                                var splitlist = data.Split(':');
+                                string ShipName = NameShip[Convert.ToInt32(splitlist[1])];
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatStyle = FlatStyle.Flat;
+                                    UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderColor = Color.Red;
+                                    UButtons[int.Parse(splitlist[2][0].ToString()), int.Parse(splitlist[2][1].ToString())].FlatAppearance.BorderSize = 1;
+                                    AddMessage($"Your {ShipName}  was hit({ShipNameConvert(splitlist[2])})");
+                                });
+                            }
+                            else if (data.StartsWith("Miss:"))
+                            {
+                                var splitlist = data.Split(':');
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    OButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
+                                    AddMessage($"You missed({ShipNameConvert(splitlist[1])})");
+                                });
+                            }
+                            else if (data.StartsWith("OMiss:"))
+                            {
+                                var splitlist = data.Split(':');
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    UButtons[int.Parse(splitlist[1][0].ToString()), int.Parse(splitlist[1][1].ToString())].BackColor = Color.Black;
+                                    AddMessage($"Your Opponents Missed({ShipNameConvert(splitlist[1])})");
+                                });
+                            }
+                            else if (data == "Invalid")
+                            {
+                                MessageBox.Show("Invalid Posistion Chosen \n Please choose again");
+                                EnableOppShips(1);
+                            }
+                            else if (data.StartsWith("OSunk:"))
+                            {
+                                string ShipNames = "";
+                                var SL = data.Split(':');
+                                var splitlist = SL[2].Split(',');
+                                string SN = NameShip[Convert.ToInt32(SL[1])];
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    foreach (var p in splitlist)
+                                    {
+                                        OButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
+                                        ShipNames += "," + ShipNameConvert(p);
+                                    }
+                                    ShipNames = ShipNames.Remove(0, 1);
+                                    AddMessage($"You Sunk Your Opponents {SN}({ShipNames})");
+                                });
+                            }
+                            else if (data.StartsWith("Sunk:"))
+                            {
+                                string ShipNames = "";
+                                var SL = data.Split(':');
+                                var splitlist = SL[2].Split(',');
+                                string SN = NameShip[Convert.ToInt32(splitlist[1])];
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    foreach (var p in splitlist)
+                                    {
+                                        UButtons[int.Parse(p[0].ToString()), int.Parse(p[1].ToString())].BackColor = Color.Red;
+                                        ShipNames += "," + ShipNameConvert(p);
+                                    }
+                                    ShipNames = ShipNames.Remove(0, 1);
+                                    AddMessage($"Your {SN} Was Sunk({ShipNames})");
+                                });
+                            }
+                            else if (data == "Win")
+                            {
+                                AddMessage("You Win");
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    HideShips.Visible = false;
+                                });
+                                MessageBox.Show("You win");
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    this.Close();
+                                    menu = new Menu();
+                                    menu.first = false;
+                                    menu.client = client;
+                                    menu.JoinPNL.Show();
+                                    menu.ShowDialog();
+                                });
+                            }
+                            else if (data == "Lose")
+                            {
+                                AddMessage("You Lose");
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    HideShips.Visible = false;
+                                });
+                                MessageBox.Show("You Lose");
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    this.Close();
+                                    menu = new Menu();
+                                    menu.client = client;
+                                    menu.JoinPNL.Show();
+                                    menu.first = false;
+                                    menu.Show();
+                                });
+                            }
+                            else if (data.StartsWith("Message:"))
+                            {
+                                var SL = data.Split(':');
+                                AddMessage($"{OppName}:{SL[1]}");
+                            }
                         }
                     }
                 }
+            }catch (Exception ex)
+            {
+                MessageBox.Show("Server has been closed:" + ex.ToString());
+                Program.Log(ex.ToString());
             }
         }
         private void OppBtn_Click(object sender, EventArgs e)
@@ -491,11 +501,12 @@ namespace BattleShipsClient
                 Send("LeftG");
                 this.Close();
                 menu = new Menu();
+                menu.first = false;
                 menu.client = client;
                 menu.JoinPNL.Show();
-                menu.first = false;
-                menu.Show();
-            }catch (Exception ex)
+                menu.ShowDialog();
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }

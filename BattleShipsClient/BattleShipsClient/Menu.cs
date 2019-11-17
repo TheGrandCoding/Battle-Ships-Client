@@ -32,12 +32,12 @@ namespace BattleShipsClient
             }
             else
             {
+                f1 = new Form1();
+                f1.menu = this;
+                f1.client = client;
                 Thread rd = new Thread(f1.recievedata);
                 rd.Start();
-                f1 = new Form1();
-                f1.client = client;
-                f1.menu = this;
-                f1.Send("UN:" + Environment.UserName);
+                //f1.Send("UN:" + Environment.UserName);
                 this.Text = "Menu";
                 JoinPNL.Show();
             }
