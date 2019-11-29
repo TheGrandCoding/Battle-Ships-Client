@@ -61,7 +61,7 @@ namespace BattleShipsClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 82.40.195.153.
+        ///   Looks up a localized string similar to 10.249.67.203.
         /// </summary>
         internal static string IPAdress {
             get {

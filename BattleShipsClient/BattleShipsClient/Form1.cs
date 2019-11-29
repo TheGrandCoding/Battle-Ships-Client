@@ -107,41 +107,81 @@ namespace BattleShipsClient
                             else if (data.StartsWith("JoinedGame:"))
                             {
                                 var splitlist = data.Split(':');
-                                this.Invoke((MethodInvoker)delegate
+                                try
                                 {
-                                    menu.JoinPNL.Hide();
-                                    menu.Text = "Game = " + splitlist[1];
-                                });
+                                    menu.Invoke((MethodInvoker)delegate
+                                    {
+                                        menu.JoinPNL.Hide();
+                                        menu.Text = "Game = " + splitlist[1];
+                                    });
+                                }
+                                catch (Exception)
+                                {
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        menu.JoinPNL.Hide();
+                                        menu.Text = "Game = " + splitlist[1];
+                                    });
+                                }
                             }
                             else if (data.StartsWith("Games:"))
                             {
                                 var splitlist = data.Split(':');
                                 var Games = splitlist[1].Split(',');
                                 foreach (var G in Games)
-                                {
-                                    this.Invoke((MethodInvoker)delegate
+                                {         
+                                    try
                                     {
-                                        if (!menu.CurrentGames.Items.Contains(G))
+                                        menu.Invoke((MethodInvoker)delegate
                                         {
-                                            menu.CurrentGames.Items.Add(G);
-                                        }
-                                    });
+                                            if (!menu.CurrentGames.Items.Contains(G))
+                                            {
+                                                menu.CurrentGames.Items.Add(G);
+                                            }
+                                        });
+                                    }
+                                    catch (Exception)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            if (!menu.CurrentGames.Items.Contains(G))
+                                            {
+                                                menu.CurrentGames.Items.Add(G);
+                                            }
+                                        });
+                                    }
                                 }
                             }
                             else if (data.StartsWith("Opp:"))
                             {
                                 var splitlist = data.Split(':');
                                 OppName = splitlist[1];
-                                this.Invoke((MethodInvoker)delegate
+                                try
                                 {
-                                    menu.RefreshTimer.Stop();
-                                    menu.Hide();
-                                    this.Text = "You vs " + OppName;
-                                    this.Show();
-                                    AddMessage($"{OppName} joined the game");
-                                    AddMessage("Please Choose Your Ships(Destroyer[2],Subramine[3],Cruiser[3],Battleship[4],Carrier[5])");
-                                    HideShips.Visible = false;
-                                });
+                                    menu.Invoke((MethodInvoker)delegate
+                                    {
+                                        menu.RefreshTimer.Stop();
+                                        menu.Hide();
+                                        this.Text = "You vs " + OppName;
+                                        this.Show();
+                                        AddMessage($"{OppName} joined the game");
+                                        AddMessage("Please Choose Your Ships(Destroyer[2],Subramine[3],Cruiser[3],Battleship[4],Carrier[5])");
+                                        HideShips.Visible = false;
+                                    });
+                                }
+                                catch (Exception)
+                                {
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        menu.RefreshTimer.Stop();
+                                        menu.Hide();
+                                        this.Text = "You vs " + OppName;
+                                        this.Show();
+                                        AddMessage($"{OppName} joined the game");
+                                        AddMessage("Please Choose Your Ships(Destroyer[2],Subramine[3],Cruiser[3],Battleship[4],Carrier[5])");
+                                        HideShips.Visible = false;
+                                    });
+                                }
                             }
                             else if (data == "Turn")
                             {
@@ -227,7 +267,7 @@ namespace BattleShipsClient
                                 string ShipNames = "";
                                 var SL = data.Split(':');
                                 var splitlist = SL[2].Split(',');
-                                string SN = NameShip[Convert.ToInt32(splitlist[1])];
+                                string SN = NameShip[Convert.ToInt32(SL[1])];
                                 this.Invoke((MethodInvoker)delegate
                                 {
                                     foreach (var p in splitlist)
@@ -278,7 +318,7 @@ namespace BattleShipsClient
                             else if (data.StartsWith("Message:"))
                             {
                                 var SL = data.Split(':');
-                                AddMessage($"{OppName}:{SL[1]}");
+                                AddMessage($"Recived from {OppName}:{SL[1]}");
                             }
                         }
                     }
@@ -480,12 +520,13 @@ namespace BattleShipsClient
 
         private void BTNSend_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(CBmsg.SelectedText))
+            if (CBmsg.SelectedIndex ==-1)
             {
                 MessageBox.Show("Invalid Message");
                 return;
             }
-            Send("Message:"+CBmsg.SelectedText);
+            Send("Message:"+CBmsg.Items[CBmsg.SelectedIndex]);
+            AddMessage("Sent:" + CBmsg.Items[CBmsg.SelectedIndex]);
             CBmsg.SelectedIndex = -1;
         }
 

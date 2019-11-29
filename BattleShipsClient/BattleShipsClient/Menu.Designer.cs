@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.JoinPNL = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.Label7 = new System.Windows.Forms.Label();
             this.NewGameName = new System.Windows.Forms.TextBox();
@@ -39,7 +40,6 @@
             this.StartNewGame = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.JoinPNL.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +59,16 @@
             this.JoinPNL.Name = "JoinPNL";
             this.JoinPNL.Size = new System.Drawing.Size(664, 392);
             this.JoinPNL.TabIndex = 9;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(3, 321);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "Quit";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // listBox1
             // 
@@ -87,7 +97,6 @@
             this.NewGameName.Name = "NewGameName";
             this.NewGameName.Size = new System.Drawing.Size(210, 20);
             this.NewGameName.TabIndex = 13;
-            this.NewGameName.Text = "Hi";
             // 
             // Refresh
             // 
@@ -162,16 +171,6 @@
             this.button1.Text = "Leave Game";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(3, 321);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "Quit";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Menu
             // 
