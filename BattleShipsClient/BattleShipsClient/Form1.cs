@@ -189,6 +189,8 @@ namespace BattleShipsClient
                                 this.Invoke((MethodInvoker)delegate
                                 {
                                     AddMessage("Your Turn");
+                                    TurnLBL.Visible = true;
+                                    this.TurnLBL.BackColor = Color.Green;
                                 });
                             }
                             else if (data == "OTurn")
@@ -196,6 +198,8 @@ namespace BattleShipsClient
                                 this.Invoke((MethodInvoker)delegate
                                 {
                                     AddMessage("Opponents Turn");
+                                    TurnLBL.Visible = true;
+                                    this.TurnLBL.BackColor = Color.Red;
                                 });
                             }
                             else if (data.StartsWith("Hit:"))
